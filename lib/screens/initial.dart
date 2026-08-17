@@ -11,6 +11,7 @@ class InitialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Center(
           child: ResponsiveWidth(
@@ -19,15 +20,15 @@ class InitialScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Coluna de Cima: Identidade Visual
                   Column(
                     spacing: 15,
                     children: [
                       Image.asset("assets/logo.png"),
                       RichText(
+                        textAlign: TextAlign.center,
                         text: TextSpan(
                           style: GoogleFonts.judson(
-                            fontSize: 32,
+                            fontSize: 50,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -41,41 +42,70 @@ class InitialScreen extends StatelessWidget {
                         ),
                       ),
                       RichText(
+                        textAlign: TextAlign.center,
                         text: const TextSpan(
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
                           children: [
                             TextSpan(
-                                text: 'Oportunidades',
+                                text: 'Encontre sua proxima \n',
                                 style: TextStyle(color: Colors.white)),
                             TextSpan(
-                                text: ' te esperam',
+                                text: 'oportunidade.',
                                 style: TextStyle(color: AppColors.lightGreen)),
                           ],
                         ),
                       ),
                     ],
                   ),
-
-                  // Coluna de Baixo: Ações
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => context.go("/cadastro"),
-                        child: const Text('Criar conta'),
-                      ),
-                      const SizedBox(height: 12),
-                      TransparentButton(
-                        onPressed: () => context.go("/login"),
-                        child: const Text('Entrar'),
-                      ),
-                    ],
-                  ),
+                  const Botoes()
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class Botoes extends StatelessWidget {
+  const Botoes({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () => context.go("/cadastro"),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 20,
+            children: [
+              Icon(
+                Icons.person,
+                size: 25,
+              ),
+              Text('Criar conta')
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        TransparentButton(
+          onPressed: () => context.go("/login"),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 20,
+            children: [
+              Icon(
+                Icons.login,
+                size: 25,
+              ),
+              Text('Entrar')
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

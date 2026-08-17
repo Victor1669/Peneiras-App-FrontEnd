@@ -35,6 +35,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      builder: (context, child) {
+        return Scaffold(
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/fundo_app.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: child,
+          ),
+        );
+      },
       color: AppColors.darkBlue,
       theme: ThemeData(
         brightness: Brightness.dark,

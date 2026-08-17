@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
-import 'package:peneiras/screens/cadastro.dart';
 
+import './screens/cadastro/cadastro.dart';
+import './screens/cadastro/cadastro_time.dart';
+import './screens/cadastro/cadastro_jogador.dart';
 import "./screens/initial.dart";
 import "./screens/login.dart";
 
@@ -21,6 +23,16 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/cadastro',
       builder: (context, state) => const CadastroScreen(),
+      routes: [
+        GoRoute(
+          path: 'jogador',
+          builder: (context, state) => const CadastroJogadorScreen(),
+        ),
+        GoRoute(
+          path: 'time',
+          builder: (context, state) => const CadastroTimeScreen(),
+        ),
+      ],
     ),
   ],
 );

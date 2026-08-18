@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 
+import './screens/cadastro/cadastro_endereco.dart';
 import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
 import './screens/cadastro/cadastro_jogador.dart';
@@ -12,7 +13,7 @@ import "./screens/initial.dart";
 import "./screens/login.dart";
 
 final GoRouter _router = GoRouter(
-  initialLocation: "/cadastro/upload-photo",
+  initialLocation: "/cadastro/endereco",
   routes: [
     GoRoute(
       path: '/',
@@ -37,6 +38,10 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'upload-photo',
           builder: (context, state) => const UploadPhotoScreen(),
+        ),
+        GoRoute(
+          path: 'endereco',
+          builder: (context, state) => const CadastroEnderecoScreen(),
         ),
       ],
     ),

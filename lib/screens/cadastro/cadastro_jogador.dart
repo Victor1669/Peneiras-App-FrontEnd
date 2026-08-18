@@ -48,6 +48,7 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
   Future<void> _handleFinalizar(Map<String, String> data) async {
     _formData.addAll(data);
     print(_formData);
+    context.go("/cadastro/upload-photo");
   }
 
   Widget _buildCurrentStep() {

@@ -17,7 +17,6 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
 
   final List<String> _subtitles = [
     "Dados pessoais\npreencha seus dados basicos.",
-    "Dados pessoais\npreencha seus dados basicos.",
     "Contato\npreencha seus dados de contato.",
   ];
 
@@ -38,13 +37,6 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
     });
   }
 
-  void _handleEndereco(Map<String, String> data) {
-    _formData.addAll(data);
-    setState(() {
-      _currentStep = 2;
-    });
-  }
-
   Future<void> _handleFinalizar(Map<String, String> data) async {
     _formData.addAll(data);
     print(_formData);
@@ -55,8 +47,6 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
     switch (_currentStep) {
       case 0:
         return DadosPessoaisTimeStep(onSubmit: _handleDadosPessoais);
-      case 1:
-        return EnderecoTimeStep(onSubmit: _handleEndereco);
       default:
         return ContatoTimeStep(onSubmit: _handleFinalizar);
     }
@@ -67,7 +57,7 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
     return MultiStepScaffold(
       title: "Criar conta (Clube)",
       subtitle: _subtitles[_currentStep],
-      totalSteps: 3,
+      totalSteps: 2,
       currentStep: _currentStep,
       onBack: _goToPreviousStep,
       child: _buildCurrentStep(),
@@ -94,6 +84,11 @@ class DadosPessoaisTimeStep extends StatelessWidget {
               (value?.length ?? 0) < 1 ? "Nome é obrigatório" : null,
         ),
         InputConfig(
+          key: "category",
+          label: "Categoria Principal",
+          placeholder: "Selecione sua categoria",
+        ),
+        InputConfig(
           key: "email",
           label: "E-mail",
           placeholder: "Insira seu e-mail",
@@ -114,41 +109,6 @@ class DadosPessoaisTimeStep extends StatelessWidget {
           icon: Icons.lock,
           validator: (value) =>
               (value?.length ?? 0) < 6 ? "Senha muito curta" : null,
-        ),
-      ],
-      onSubmit: onSubmit,
-    );
-  }
-}
-
-class EnderecoTimeStep extends StatelessWidget {
-  final Function(Map<String, String>) onSubmit;
-
-  const EnderecoTimeStep({super.key, required this.onSubmit});
-
-  @override
-  Widget build(BuildContext context) {
-    return DynamicForm(
-      submitText: "Continuar",
-      inputs: [
-        InputConfig(
-          key: "category",
-          label: "Categoria Principal",
-          placeholder: "Selecione sua categoria",
-        ),
-        InputConfig(
-          key: "cep",
-          label: "CEP",
-          placeholder: "Insira seu endereço (CEP)",
-        ),
-        InputConfig(
-          key: "number",
-          label: "Numero",
-          keyboardType: TextInputType.number,
-        ),
-        InputConfig(
-          key: "complement",
-          label: "Complemento",
         ),
       ],
       onSubmit: onSubmit,

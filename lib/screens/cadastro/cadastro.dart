@@ -62,14 +62,14 @@ class CadastroScreenBody extends StatelessWidget {
                           description:
                               "Quero me cadastrar para encontrar oportunidades e participar de peneiras.",
                           icon: Icons.person,
-                          onPressed: () => context.go("/cadastro/time"),
+                          onPressed: () => context.go("/cadastro/jogador"),
                         ),
                         CadastroButton(
                           text: "Sou Clube/Time",
                           description:
                               "Quero  cadastrar meu clube e publicar peneiras para encontrar talentos.",
                           icon: Icons.shield_sharp,
-                          onPressed: () => context.go("/cadastro/jogador"),
+                          onPressed: () => context.go("/cadastro/time"),
                         )
                       ],
                     )

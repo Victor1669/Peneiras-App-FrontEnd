@@ -116,6 +116,7 @@ class LoginForm extends StatelessWidget {
           label: "E-mail",
           placeholder: "exemplo@email.com",
           keyboardType: TextInputType.emailAddress,
+          icon: Icons.email,
           validator: (value) {
             if (value == null || !value.contains('@')) {
               return "E-mail inválido";
@@ -127,6 +128,7 @@ class LoginForm extends StatelessWidget {
           key: "password",
           label: "Senha",
           isPassword: true,
+          icon: Icons.lock,
           validator: (value) =>
               (value?.length ?? 0) < 6 ? "Senha muito curta" : null,
         ),

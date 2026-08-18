@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/responsive_width.dart';
+import '../layout/responsive_width.dart';
 import '../widgets/transparent_button.dart';
 import '../constants/app_colors.dart';
 

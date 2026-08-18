@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:peneiras/models/input_config.dart';
 import 'package:peneiras/widgets/dynamic_form.dart';
-import 'package:peneiras/widgets/multi_step_scaffold.dart';
+import 'package:peneiras/layout/multi_step_scaffold.dart';
 
 class CadastroJogadorScreen extends StatefulWidget {
   const CadastroJogadorScreen({super.key});

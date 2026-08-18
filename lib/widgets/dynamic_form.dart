@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peneiras/widgets/responsive_width.dart';
+import 'package:peneiras/layout/responsive_width.dart';
 import '../models/input_config.dart';
 
 class DynamicForm extends StatefulWidget {

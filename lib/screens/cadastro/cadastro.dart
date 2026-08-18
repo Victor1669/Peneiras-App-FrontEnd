@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:peneiras/widgets/header_stack.dart';
+
+import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/widgets/transparent_button.dart';
 
 import '../../constants/app_colors.dart';
@@ -19,77 +20,63 @@ class CadastroScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  spacing: 10,
-                  children: [
-                    HeaderStack(
-                        onBack: () {
-                          context.go("/");
-                        },
-                        title: "Criar conta"),
-                    const Padding(
-                      padding: EdgeInsetsGeometry.all(20),
-                      child: Text(
-                        "Escolha o tipo de conta que melhor te descreve.",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Column(
-                      spacing: 30,
-                      children: [
-                        CadastroButton(
-                          text: "Sou Jogador",
-                          description:
-                              "Quero me cadastrar para encontrar oportunidades e participar de peneiras.",
-                          icon: Icons.person,
-                          onPressed: () => context.go("/cadastro/jogador"),
-                        ),
-                        CadastroButton(
-                          text: "Sou Clube/Time",
-                          description:
-                              "Quero  cadastrar meu clube e publicar peneiras para encontrar talentos.",
-                          icon: Icons.shield_sharp,
-                          onPressed: () => context.go("/cadastro/time"),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Column(
-                  spacing: 10,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        context.push('/login');
-                      },
-                      child: RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          children: [
-                            TextSpan(
-                                text: 'Já tem uma conta?',
-                                style: TextStyle(color: Colors.white)),
-                            TextSpan(
-                                text: ' Entrar',
-                                style: TextStyle(color: AppColors.lightGreen)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+    return ScreenFrame(
+      title: "Criar conta",
+      onBack: () => context.go("/"),
+      footer: Column(
+        spacing: 10,
+        children: [
+          TextButton(
+            onPressed: () => context.push('/login'),
+            child: RichText(
+              text: const TextSpan(
+                style: TextStyle(fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                    text: 'Já tem uma conta?',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  TextSpan(
+                    text: ' Entrar',
+                    style: TextStyle(color: AppColors.lightGreen),
+                  ),
+                ],
+              ),
             ),
           ),
-        ));
+        ],
+      ),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsetsGeometry.all(20),
+            child: Text(
+              "Escolha o tipo de conta que melhor te descreve.",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Column(
+            spacing: 30,
+            children: [
+              CadastroButton(
+                text: "Sou Jogador",
+                description:
+                    "Quero me cadastrar para encontrar oportunidades e participar de peneiras.",
+                icon: Icons.person,
+                onPressed: () => context.go("/cadastro/jogador"),
+              ),
+              CadastroButton(
+                text: "Sou Clube/Time",
+                description:
+                    "Quero cadastrar meu clube e publicar peneiras para encontrar talentos.",
+                icon: Icons.shield_sharp,
+                onPressed: () => context.go("/cadastro/time"),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 

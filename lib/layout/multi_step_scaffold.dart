@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peneiras/widgets/header_stack.dart';
+
+import 'package:peneiras/layout/screen_frame.dart';
 
 class MultiStepScaffold extends StatelessWidget {
   final String title;
@@ -21,45 +22,34 @@ class MultiStepScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  HeaderStack(
-                    onBack: onBack,
-                    title: title,
-                    fontSize: 20,
-                  ),
-                  const SizedBox(height: 16),
-                  StepIndicator(
-                    totalSteps: totalSteps,
-                    currentStep: currentStep,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      subtitle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    child: KeyedSubtree(
-                      key: ValueKey(currentStep),
-                      child: child,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    return ScreenFrame(
+      title: title,
+      headerFontSize: 20,
+      onBack: onBack,
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          StepIndicator(
+            totalSteps: totalSteps,
+            currentStep: currentStep,
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              subtitle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: KeyedSubtree(
+                key: ValueKey(currentStep),
+                child: child,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

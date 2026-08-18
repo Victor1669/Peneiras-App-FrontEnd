@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:peneiras/widgets/header_stack.dart';
+import 'package:peneiras/layout/screen_frame.dart';
 
 import '../models/input_config.dart';
 
@@ -22,73 +22,46 @@ class LoginScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    HeaderStack(
-                        onBack: () {
-                          context.go("/");
-                        },
-                        title: "Entrar"),
-                    const Padding(
-                      padding: EdgeInsetsGeometry.all(20),
-                      child: Text("Bem vindo(a) de volta!"),
-                    ),
-                    const LoginForm(),
-                  ],
-                ),
-                Column(
-                  spacing: 10,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        context.push('/recuperar-senha');
-                      },
-                      child: RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          children: [
-                            TextSpan(
-                                text: 'Esqueceu sua senha?',
-                                style: TextStyle(color: Colors.white)),
-                            TextSpan(
-                                text: ' Clique aqui',
-                                style: TextStyle(color: AppColors.lightGreen)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.push('/cadastro');
-                      },
-                      child: RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          children: [
-                            TextSpan(
-                                text: 'Ainda nao tem conta?',
-                                style: TextStyle(color: Colors.white)),
-                            TextSpan(
-                                text: ' Criar conta',
-                                style: TextStyle(color: AppColors.lightGreen)),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
+    return ScreenFrame(
+      title: "Entrar",
+      onBack: () => context.go("/"),
+      footer: Column(
+        spacing: 10,
+        children: [
+          _buildFooterLink(context, '/recuperar-senha', 'Esqueceu sua senha?',
+              ' Clique aqui'),
+          _buildFooterLink(
+              context, '/cadastro', 'Ainda nao tem conta?', ' Criar conta'),
+        ],
+      ),
+      child: const Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text("Bem vindo(a) de volta!"),
           ),
-        ));
+          LoginForm(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooterLink(
+      BuildContext context, String route, String text1, String text2) {
+    return TextButton(
+      onPressed: () => context.push(route),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(fontWeight: FontWeight.bold),
+          children: [
+            TextSpan(text: text1, style: const TextStyle(color: Colors.white)),
+            TextSpan(
+                text: text2,
+                style: const TextStyle(color: AppColors.lightGreen)),
+          ],
+        ),
+      ),
+    );
   }
 }
 

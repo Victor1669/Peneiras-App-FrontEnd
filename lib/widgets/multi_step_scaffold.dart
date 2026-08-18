@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peneiras/widgets/header_stack.dart';
 
 class MultiStepScaffold extends StatelessWidget {
   final String title;
@@ -30,21 +31,10 @@ class MultiStepScaffold extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: BackButton(
-                          onPressed: onBack,
-                        ),
-                      ),
-                      Text(
-                        textAlign: TextAlign.center,
-                        title,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ],
+                  HeaderStack(
+                    onBack: onBack,
+                    title: title,
+                    fontSize: 20,
                   ),
                   const SizedBox(height: 16),
                   StepIndicator(

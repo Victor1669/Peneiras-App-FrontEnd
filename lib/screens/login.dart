@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peneiras/widgets/header_stack.dart';
 
 import '../models/input_config.dart';
 
@@ -31,24 +32,11 @@ class LoginScreenBody extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: BackButton(
-                            onPressed: () {
-                              context.go("/");
-                            },
-                          ),
-                        ),
-                        const Text(
-                          textAlign: TextAlign.center,
-                          "Entrar",
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ],
-                    ),
+                    HeaderStack(
+                        onBack: () {
+                          context.go("/");
+                        },
+                        title: "Entrar"),
                     const Padding(
                       padding: EdgeInsetsGeometry.all(20),
                       child: Text("Bem vindo(a) de volta!"),

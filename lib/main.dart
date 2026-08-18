@@ -7,10 +7,12 @@ import 'package:peneiras/constants/app_colors.dart';
 import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
 import './screens/cadastro/cadastro_jogador.dart';
+import "./screens/cadastro/upload_photo.dart";
 import "./screens/initial.dart";
 import "./screens/login.dart";
 
 final GoRouter _router = GoRouter(
+  initialLocation: "/cadastro/upload-photo",
   routes: [
     GoRoute(
       path: '/',
@@ -31,6 +33,10 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'time',
           builder: (context, state) => const CadastroTimeScreen(),
+        ),
+        GoRoute(
+          path: 'upload-photo',
+          builder: (context, state) => const UploadPhotoScreen(),
         ),
       ],
     ),

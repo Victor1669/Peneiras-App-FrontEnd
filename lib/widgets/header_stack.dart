@@ -4,12 +4,16 @@ class HeaderStack extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
   final double? fontSize;
+  final bool showBackButton;
+  final Widget? rightWidget;
 
   const HeaderStack({
     super.key,
     required this.onBack,
     required this.title,
     this.fontSize = 32,
+    this.showBackButton = true,
+    this.rightWidget,
   });
 
   @override
@@ -17,17 +21,21 @@ class HeaderStack extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: BackButton(
-            onPressed: onBack,
+        if (showBackButton)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: BackButton(onPressed: onBack),
           ),
-        ),
         Text(
-          textAlign: TextAlign.center,
           title,
+          textAlign: TextAlign.center,
           style: TextStyle(fontSize: fontSize),
         ),
+        if (rightWidget != null)
+          Align(
+            alignment: Alignment.centerRight,
+            child: rightWidget!,
+          ),
       ],
     );
   }

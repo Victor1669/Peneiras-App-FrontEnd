@@ -96,6 +96,7 @@ class LoginForm extends StatelessWidget {
       ],
       onSubmit: (data) {
         print("Dados recebidos: $data");
+        context.go("/home");
       },
     );
   }

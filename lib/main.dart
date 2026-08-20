@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:peneiras/layout/main_shell.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 
@@ -9,11 +12,14 @@ import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
 import './screens/cadastro/cadastro_jogador.dart';
 import "./screens/cadastro/upload_photo.dart";
+import './screens/cadastro/cadsatro_sucesso.dart';
+
 import "./screens/initial.dart";
 import "./screens/login.dart";
+import './screens/home.dart';
 
 final GoRouter _router = GoRouter(
-  initialLocation: "/cadastro/endereco",
+  initialLocation: "/home",
   routes: [
     GoRoute(
       path: '/',
@@ -43,13 +49,31 @@ final GoRouter _router = GoRouter(
           path: 'endereco',
           builder: (context, state) => const CadastroEnderecoScreen(),
         ),
+        GoRoute(
+          path: 'sucesso',
+          builder: (context, state) => const CadastroSucessoScreen(),
+        ),
+      ],
+    ),
+    ShellRoute(
+      builder: (context, state, child) {
+        return MainShell(child: child);
+      },
+      routes: [
+        GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
       ],
     ),
   ],
 );
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -60,6 +84,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       builder: (context, child) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Container(
             width: double.infinity,
             height: double.infinity,

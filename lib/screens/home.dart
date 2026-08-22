@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/app_colors.dart';
 
 import 'package:peneiras/models/peneira_model.dart';
-import '../widgets/peneira_card.dart';
 
+import '../widgets/peneira_card.dart';
 import '../widgets/destaque_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    _carregarEPrintarToken();
+  }
+
+  Future<void> _carregarEPrintarToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('auth_token');
+
+    print("[DEBUG] Auth Token carregado na Home: $token");
+
+    if (token != null && mounted) {
+      /// TODO: Adicionar futuras requisições
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +53,13 @@ class HomeScreen extends StatelessWidget {
           _HomeHeader(),
           Expanded(
             child: SingleChildScrollView(
-                child: Column(
-              children: [
-                _HomeDestaques(),
-                _HomePeneiras(),
-              ],
-            )),
+              child: Column(
+                children: [
+                  _HomeDestaques(),
+                  _HomePeneiras(),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -50,7 +75,6 @@ class _HomeHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //Center(child: Image.asset("assets/logo_home.png")),
         const SizedBox(height: 20),
         RichText(
           text: TextSpan(

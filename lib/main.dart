@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:peneiras/layout/main_shell.dart';
+import 'package:peneiras/utils/preferences_helper.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
+
+import 'package:peneiras/layout/main_shell.dart';
 
 import './screens/cadastro/cadastro_endereco.dart';
 import './screens/cadastro/cadastro.dart';
@@ -14,12 +16,13 @@ import './screens/cadastro/cadastro_jogador.dart';
 import "./screens/cadastro/upload_photo.dart";
 import './screens/cadastro/cadsatro_sucesso.dart';
 
+import 'package:peneiras/screens/home.dart';
 import "./screens/initial.dart";
 import "./screens/login.dart";
-import './screens/home.dart';
+import './screens/profile.dart';
 
 final GoRouter _router = GoRouter(
-  initialLocation: "/home",
+  initialLocation: "/login",
   routes: [
     GoRoute(
       path: '/',
@@ -61,19 +64,25 @@ final GoRouter _router = GoRouter(
       },
       routes: [
         GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+        GoRoute(
+            path: '/perfil',
+            builder: (context, state) => const ProfileScreen()),
       ],
     ),
   ],
 );
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
+
+  await PreferencesHelper.init();
+
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) {
-    runApp(const MyApp());
-  });
+  ]);
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -82,6 +91,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      scrollBehavior:
+          const MaterialScrollBehavior().copyWith(scrollbars: false),
       builder: (context, child) {
         return Scaffold(
           resizeToAvoidBottomInset: false,

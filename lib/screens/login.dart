@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:peneiras/layout/screen_frame.dart';
+
+import 'package:peneiras/services/auth_service.dart';
 
 import '../models/input_config.dart';
 
 import '../constants/app_colors.dart';
+
+import 'package:peneiras/layout/screen_frame.dart';
 
 import 'package:peneiras/widgets/dynamic_form.dart';
 
@@ -94,9 +97,28 @@ class LoginForm extends StatelessWidget {
               (value?.length ?? 0) < 6 ? "Senha muito curta" : null,
         ),
       ],
-      onSubmit: (data) {
-        print("Dados recebidos: $data");
-        context.go("/home");
+      onSubmit: (data) async {
+        final String email = data['email']?.toString() ?? '';
+        final String password = data['password']?.toString() ?? '';
+
+        try {
+          final authService = AuthService();
+
+          await authService.login(email: email, password: password);
+
+          if (context.mounted) {
+            context.go("/home");
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.toString().replaceAll('Exception: ', '')),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+          }
+        }
       },
     );
   }

@@ -19,7 +19,7 @@ class DestaqueCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF0A192F),
+        color: AppColors.darkBlue2,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(color: AppColors.lightGreen, width: 1.5),
       ),

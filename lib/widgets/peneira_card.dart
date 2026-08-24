@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peneiras/constants/app_colors.dart';
 import 'package:peneiras/models/peneira_model.dart';
 
 class PeneiraCard extends StatelessWidget {
@@ -18,7 +19,7 @@ class PeneiraCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFF0F1E2E),
+          color: AppColors.darkBlue2,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: Colors.white.withValues(alpha: 0.15),

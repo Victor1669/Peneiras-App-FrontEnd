@@ -16,13 +16,13 @@ import './screens/cadastro/cadastro_jogador.dart';
 import "./screens/cadastro/upload_photo.dart";
 import './screens/cadastro/cadsatro_sucesso.dart';
 
-import 'package:peneiras/screens/home.dart';
+import 'package:peneiras/screens/content/home.dart';
 import "./screens/initial.dart";
 import "./screens/login.dart";
-import './screens/profile.dart';
+import 'screens/content/profile/profile.dart';
 
 final GoRouter _router = GoRouter(
-  initialLocation: "/login",
+  initialLocation: "/home",
   routes: [
     GoRoute(
       path: '/',
@@ -109,10 +109,10 @@ class MyApp extends StatelessWidget {
           ),
         );
       },
-      color: AppColors.darkBlue,
+      color: AppColors.darkBlue1,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: AppColors.darkBlue,
+        scaffoldBackgroundColor: AppColors.darkBlue1,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 50),

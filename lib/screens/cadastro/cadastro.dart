@@ -102,9 +102,9 @@ class CadastroButton extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xff35620D),
+              color: AppColors.darkGreen,
               border: Border.all(
-                color: const Color(0xff5FFF37),
+                color: AppColors.lightGreen,
                 width: 2,
               ),
             ),

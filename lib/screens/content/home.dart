@@ -3,12 +3,12 @@ import 'package:peneiras/layout/screen_frame.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants/app_colors.dart';
+import '../../constants/app_colors.dart';
 
 import 'package:peneiras/models/peneira_model.dart';
 
-import '../widgets/peneira_card.dart';
-import '../widgets/destaque_card.dart';
+import '../../widgets/peneira_card.dart';
+import '../../widgets/destaque_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

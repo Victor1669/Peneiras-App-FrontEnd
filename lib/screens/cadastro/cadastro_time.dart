@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:peneiras/models/bodys/cadastro_body.dart';
 import 'package:peneiras/models/input_config.dart';
+
+import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/widgets/dynamic_form.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
 
@@ -37,18 +41,46 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
     });
   }
 
-  Future<void> _handleFinalizar(Map<String, String> data) async {
-    _formData.addAll(data);
-    print(_formData);
-    context.go("/cadastro/upload-photo");
-  }
-
   Widget _buildCurrentStep() {
     switch (_currentStep) {
       case 0:
-        return DadosPessoaisTimeStep(onSubmit: _handleDadosPessoais);
+        return _DadosPessoaisTimeStep(onSubmit: _handleDadosPessoais);
       default:
-        return ContatoTimeStep(onSubmit: _handleFinalizar);
+        return _ContatoTimeStep(onSubmit: (data) async {
+          _formData.addAll(data);
+
+          print(_formData);
+
+          final Map<String, String> dataParaEnvio = Map.from(_formData);
+
+          try {
+            final authService = AuthService();
+
+            final clubBody = CadastroClubBody.fromMap(dataParaEnvio);
+
+            await authService.createClub(clubBody);
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Clube criado com sucesso!"),
+                backgroundColor: Colors.green,
+              ),
+            );
+
+            context.go("/cadastro/upload-photo");
+          } catch (e) {
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.toString().replaceAll('Exception: ', '')),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+          }
+        });
     }
   }
 
@@ -65,10 +97,10 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
   }
 }
 
-class DadosPessoaisTimeStep extends StatelessWidget {
+class _DadosPessoaisTimeStep extends StatelessWidget {
   final Function(Map<String, String>) onSubmit;
 
-  const DadosPessoaisTimeStep({super.key, required this.onSubmit});
+  const _DadosPessoaisTimeStep({required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +108,7 @@ class DadosPessoaisTimeStep extends StatelessWidget {
       submitText: "Continuar",
       inputs: [
         InputConfig(
-          key: "clubName",
+          key: "name",
           label: "Nome do clube",
           placeholder: "Insira o nome do seu clube",
           icon: Icons.shield_outlined,
@@ -84,10 +116,11 @@ class DadosPessoaisTimeStep extends StatelessWidget {
               (value?.length ?? 0) < 1 ? "Nome é obrigatório" : null,
         ),
         InputConfig(
-          key: "category",
-          label: "Categoria Principal",
-          placeholder: "Selecione sua categoria",
-        ),
+            key: "category",
+            label: "Categoria Principal",
+            placeholder: "Selecione sua categoria",
+            type: InputType.select,
+            items: ["FUTEBOL", "FUTSAL"]),
         InputConfig(
           key: "email",
           label: "E-mail",
@@ -116,10 +149,10 @@ class DadosPessoaisTimeStep extends StatelessWidget {
   }
 }
 
-class ContatoTimeStep extends StatelessWidget {
+class _ContatoTimeStep extends StatelessWidget {
   final Function(Map<String, String>) onSubmit;
 
-  const ContatoTimeStep({super.key, required this.onSubmit});
+  const _ContatoTimeStep({required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +174,7 @@ class ContatoTimeStep extends StatelessWidget {
           icon: Icons.chat_bubble_outline,
         ),
         InputConfig(
-          key: "instagram",
+          key: "instagramAccount",
           label: "Instagram",
           placeholder: "@seuclube",
           icon: Icons.camera_alt_outlined,

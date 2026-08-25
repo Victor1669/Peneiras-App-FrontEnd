@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:peneiras/models/input_config.dart';
-import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/models/bodys/cadastro_body.dart';
+import 'package:peneiras/services/auth_service.dart';
+import 'package:peneiras/utils/app_date_utils.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
+import 'package:peneiras/widgets/dynamic_form.dart';
 
 class CadastroJogadorScreen extends StatefulWidget {
   const CadastroJogadorScreen({super.key});
@@ -45,20 +49,50 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
     });
   }
 
-  Future<void> _handleFinalizar(Map<String, String> data) async {
-    _formData.addAll(data);
-    print(_formData);
-    context.go("/cadastro/upload-photo");
-  }
-
   Widget _buildCurrentStep() {
     switch (_currentStep) {
       case 0:
-        return DadosPessoaisStep(onSubmit: _handleDadosPessoais);
+        return _DadosPessoaisStep(onSubmit: _handleDadosPessoais);
       case 1:
-        return PosicaoStep(onSubmit: _handlePosicao);
+        return _PosicaoStep(onSubmit: _handlePosicao);
       default:
-        return CategoriaStep(onSubmit: _handleFinalizar);
+        return _CategoriaStep(onSubmit: (data) async {
+          _formData.addAll(data);
+
+          final Map<String, String> dataParaEnvio = Map.from(_formData);
+          if (dataParaEnvio.containsKey('birthDate')) {
+            dataParaEnvio['birthDate'] =
+                AppDateUtils.toApiFormat(dataParaEnvio['birthDate']!);
+          }
+
+          try {
+            final authService = AuthService();
+
+            final playerBody = CadastroPlayerBody.fromMap(dataParaEnvio);
+
+            await authService.createPlayer(playerBody);
+
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Jogador criado com sucesso!"),
+                backgroundColor: Colors.green,
+              ),
+            );
+
+            context.go("/cadastro/upload-photo");
+          } catch (e) {
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.toString().replaceAll('Exception: ', '')),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+          }
+        });
     }
   }
 
@@ -75,10 +109,10 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
   }
 }
 
-class DadosPessoaisStep extends StatelessWidget {
+class _DadosPessoaisStep extends StatelessWidget {
   final Function(Map<String, String>) onSubmit;
 
-  const DadosPessoaisStep({super.key, required this.onSubmit});
+  const _DadosPessoaisStep({required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +153,10 @@ class DadosPessoaisStep extends StatelessWidget {
   }
 }
 
-class PosicaoStep extends StatelessWidget {
+class _PosicaoStep extends StatelessWidget {
   final Function(Map<String, String>) onSubmit;
 
-  const PosicaoStep({super.key, required this.onSubmit});
+  const _PosicaoStep({required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -138,24 +172,37 @@ class PosicaoStep extends StatelessWidget {
               (value?.length ?? 0) < 1 ? "Data é obrigatória" : null,
         ),
         InputConfig(
-          key: "position",
-          label: "Posição",
-          placeholder: "Selecione sua posição",
-        ),
+            key: "position",
+            label: "Posição",
+            placeholder: "Selecione sua posição",
+            type: InputType.select,
+            items: [
+              "GOLEIRO",
+              "ZAGUEIRO",
+              "LATERAL",
+              "VOLANTE",
+              "MEIA",
+              "PONTA",
+              "CENTRO_AVANTE",
+              "FIXO",
+              "ALA",
+              "PIVO"
+            ]),
         InputConfig(
-          key: "dominantFoot",
-          label: "Pé dominante",
-        ),
+            key: "dominantFoot",
+            label: "Pé dominante",
+            type: InputType.select,
+            items: ["DIREITO", "ESQUERDO", "AMBOS"]),
       ],
       onSubmit: onSubmit,
     );
   }
 }
 
-class CategoriaStep extends StatelessWidget {
+class _CategoriaStep extends StatelessWidget {
   final Function(Map<String, String>) onSubmit;
 
-  const CategoriaStep({super.key, required this.onSubmit});
+  const _CategoriaStep({required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +210,14 @@ class CategoriaStep extends StatelessWidget {
       submitText: "Finalizar",
       inputs: [
         InputConfig(
-          key: "category",
-          label: "Categoria Principal",
-          placeholder: "Selecione sua categoria",
-        ),
+            key: "category",
+            label: "Categoria Principal",
+            placeholder: "Selecione sua categoria",
+            type: InputType.select,
+            items: ["FUTEBOL", "FUTSAL"]),
         InputConfig(
-          key: "height",
-          label: "Altura",
+          key: "heightCm",
+          label: "Altura em centímetros",
           placeholder: "Ex: 180",
           keyboardType: TextInputType.number,
         ),

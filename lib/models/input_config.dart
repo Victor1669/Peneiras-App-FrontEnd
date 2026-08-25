@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum InputType { text, select }
+
 class InputConfig {
   final String key;
   final String label;
@@ -9,6 +11,9 @@ class InputConfig {
   final String? Function(String?)? validator;
   final IconData? icon;
 
+  final InputType type;
+  final List<String>? items;
+
   InputConfig({
     required this.key,
     required this.label,
@@ -17,5 +22,7 @@ class InputConfig {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.icon,
+    this.type = InputType.text,
+    this.items,
   });
 }

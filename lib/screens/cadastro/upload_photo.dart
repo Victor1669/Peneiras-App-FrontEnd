@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/layout/responsive_width.dart';
 
+import 'package:peneiras/widgets/photo_container.dart';
+
 class UploadPhotoScreen extends StatefulWidget {
   const UploadPhotoScreen({super.key});
 
@@ -66,24 +68,10 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 180,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.greenAccent,
-                        width: 2,
-                      ),
-                      image: _getImageProvider(),
-                    ),
-                    child: (_selectedImage == null && _webImage == null)
-                        ? const Icon(
-                            Icons.person,
-                            size: 80,
-                            color: Colors.white54,
-                          )
-                        : null,
+                  PhotoContainer(
+                    size: 180,
+                    selectedImage: _selectedImage,
+                    webImage: _webImage,
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
@@ -98,20 +86,5 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
         ),
       ),
     );
-  }
-
-  DecorationImage? _getImageProvider() {
-    if (kIsWeb && _webImage != null) {
-      return DecorationImage(
-        image: MemoryImage(_webImage!),
-        fit: BoxFit.cover,
-      );
-    } else if (!kIsWeb && _selectedImage != null) {
-      return DecorationImage(
-        image: FileImage(_selectedImage!),
-        fit: BoxFit.cover,
-      );
-    }
-    return null;
   }
 }

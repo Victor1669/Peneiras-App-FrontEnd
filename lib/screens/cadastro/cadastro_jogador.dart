@@ -6,7 +6,9 @@ import 'package:peneiras/models/bodys/cadastro_body.dart';
 import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/utils/app_date_utils.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
+
 import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/models/inputs.dart';
 
 class CadastroJogadorScreen extends StatefulWidget {
   const CadastroJogadorScreen({super.key});
@@ -119,34 +121,9 @@ class _DadosPessoaisStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        InputConfig(
-          key: "name",
-          label: "Nome completo",
-          icon: Icons.person,
-          validator: (value) =>
-              (value?.length ?? 0) < 1 ? "Nome é obrigatório" : null,
-        ),
-        InputConfig(
-          key: "email",
-          label: "E-mail",
-          placeholder: "exemplo@email.com",
-          keyboardType: TextInputType.emailAddress,
-          icon: Icons.email,
-          validator: (value) {
-            if (value == null || !value.contains('@')) {
-              return "E-mail inválido";
-            }
-            return null;
-          },
-        ),
-        InputConfig(
-          key: "password",
-          label: "Senha",
-          isPassword: true,
-          icon: Icons.lock,
-          validator: (value) =>
-              (value?.length ?? 0) < 6 ? "Senha muito curta" : null,
-        ),
+        playerNameInput,
+        emailInput,
+        passwordInput,
       ],
       onSubmit: onSubmit,
     );
@@ -163,31 +140,8 @@ class _PosicaoStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        InputConfig(
-          key: "birthDate",
-          label: "Data de nascimento",
-          placeholder: "DD/MM/AAAA",
-          keyboardType: TextInputType.datetime,
-          validator: (value) =>
-              (value?.length ?? 0) < 1 ? "Data é obrigatória" : null,
-        ),
-        InputConfig(
-            key: "position",
-            label: "Posição",
-            placeholder: "Selecione sua posição",
-            type: InputType.select,
-            items: [
-              "GOLEIRO",
-              "ZAGUEIRO",
-              "LATERAL",
-              "VOLANTE",
-              "MEIA",
-              "PONTA",
-              "CENTRO_AVANTE",
-              "FIXO",
-              "ALA",
-              "PIVO"
-            ]),
+        dateInput,
+        positionInput,
         InputConfig(
             key: "dominantFoot",
             label: "Pé dominante",
@@ -209,18 +163,8 @@ class _CategoriaStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Finalizar",
       inputs: [
-        InputConfig(
-            key: "category",
-            label: "Categoria Principal",
-            placeholder: "Selecione sua categoria",
-            type: InputType.select,
-            items: ["FUTEBOL", "FUTSAL"]),
-        InputConfig(
-          key: "heightCm",
-          label: "Altura em centímetros",
-          placeholder: "Ex: 180",
-          keyboardType: TextInputType.number,
-        ),
+        categoryInput,
+        heightInput,
       ],
       onSubmit: onSubmit,
     );

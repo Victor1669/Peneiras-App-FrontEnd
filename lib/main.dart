@@ -9,6 +9,10 @@ import 'package:peneiras/constants/app_colors.dart';
 
 import 'package:peneiras/layout/main_shell.dart';
 
+import "./screens/initial.dart";
+
+import "./screens/login.dart";
+
 import './screens/cadastro/cadastro_endereco.dart';
 import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
@@ -17,9 +21,8 @@ import "./screens/cadastro/upload_photo.dart";
 import './screens/cadastro/cadsatro_sucesso.dart';
 
 import 'package:peneiras/screens/content/home.dart';
-import "./screens/initial.dart";
-import "./screens/login.dart";
-import 'screens/content/profile/profile.dart';
+import 'screens/content/profile/perfil.dart';
+import 'package:peneiras/screens/content/profile/editar_perfil.dart';
 
 final GoRouter _router = GoRouter(
   initialLocation: "/home",
@@ -66,7 +69,13 @@ final GoRouter _router = GoRouter(
         GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
         GoRoute(
             path: '/perfil',
-            builder: (context, state) => const ProfileScreen()),
+            builder: (context, state) => const PerfilScreen(),
+            routes: [
+              GoRoute(
+                path: 'editar-perfil',
+                builder: (context, state) => const EditarPerfilScreen(),
+              ),
+            ]),
       ],
     ),
   ],

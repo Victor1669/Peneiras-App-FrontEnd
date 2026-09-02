@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/services/auth_service.dart';
-
-import '../models/input_config.dart';
+import 'package:peneiras/models/inputs.dart';
 
 import '../constants/app_colors.dart';
 
@@ -75,27 +74,8 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicForm(
       inputs: [
-        InputConfig(
-          key: "email",
-          label: "E-mail",
-          placeholder: "exemplo@email.com",
-          keyboardType: TextInputType.emailAddress,
-          icon: Icons.email,
-          validator: (value) {
-            if (value == null || !value.contains('@')) {
-              return "E-mail inválido";
-            }
-            return null;
-          },
-        ),
-        InputConfig(
-          key: "password",
-          label: "Senha",
-          isPassword: true,
-          icon: Icons.lock,
-          validator: (value) =>
-              (value?.length ?? 0) < 6 ? "Senha muito curta" : null,
-        ),
+        emailInput,
+        passwordInput,
       ],
       onSubmit: (data) async {
         final String email = data['email']?.toString() ?? '';

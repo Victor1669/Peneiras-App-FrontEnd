@@ -8,10 +8,10 @@ import 'package:peneiras/constants/app_colors.dart';
 import 'club_profile.dart';
 import 'player_profile.dart';
 
-class ProfileScreen extends StatelessWidget {
+class PerfilScreen extends StatelessWidget {
   final bool isClub;
 
-  const ProfileScreen({super.key, this.isClub = false});
+  const PerfilScreen({super.key, this.isClub = false});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
       showBackButton: false,
       rightWidget: IconButton(
         icon: const Icon(Icons.settings, color: AppColors.lightGreen),
-        onPressed: () => print("Configurações clicadas"),
+        onPressed: () => {context.go("/perfil/editar-perfil")},
       ),
       child: SingleChildScrollView(
         child: Column(

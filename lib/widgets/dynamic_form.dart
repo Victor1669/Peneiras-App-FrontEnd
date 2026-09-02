@@ -76,7 +76,7 @@ class _DynamicFormState extends State<DynamicForm> {
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: config.type == InputType.select
                     ? DropdownButtonFormField<String>(
-                        value: _selectedValues[config.key],
+                        initialValue: _selectedValues[config.key],
                         decoration: InputDecoration(
                           labelText: config.label,
                           hintText: config.placeholder,

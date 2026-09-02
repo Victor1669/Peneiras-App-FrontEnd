@@ -7,6 +7,7 @@ import 'package:peneiras/models/input_config.dart';
 import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/widgets/dynamic_form.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
+import 'package:peneiras/models/inputs.dart';
 
 class CadastroTimeScreen extends StatefulWidget {
   const CadastroTimeScreen({super.key});
@@ -107,42 +108,10 @@ class _DadosPessoaisTimeStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        InputConfig(
-          key: "name",
-          label: "Nome do clube",
-          placeholder: "Insira o nome do seu clube",
-          icon: Icons.shield_outlined,
-          validator: (value) =>
-              (value?.length ?? 0) < 1 ? "Nome é obrigatório" : null,
-        ),
-        InputConfig(
-            key: "category",
-            label: "Categoria Principal",
-            placeholder: "Selecione sua categoria",
-            type: InputType.select,
-            items: ["FUTEBOL", "FUTSAL"]),
-        InputConfig(
-          key: "email",
-          label: "E-mail",
-          placeholder: "Insira seu e-mail",
-          keyboardType: TextInputType.emailAddress,
-          icon: Icons.email,
-          validator: (value) {
-            if (value == null || !value.contains('@')) {
-              return "E-mail inválido";
-            }
-            return null;
-          },
-        ),
-        InputConfig(
-          key: "password",
-          label: "Senha",
-          placeholder: "sua senha",
-          isPassword: true,
-          icon: Icons.lock,
-          validator: (value) =>
-              (value?.length ?? 0) < 6 ? "Senha muito curta" : null,
-        ),
+        teamNameInput,
+        categoryInput,
+        emailInput,
+        passwordInput,
       ],
       onSubmit: onSubmit,
     );

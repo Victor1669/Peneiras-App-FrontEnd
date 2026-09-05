@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
 
-enum InputType { text, select }
+enum InputType {
+  text,
+  select,
+  date,
+  time,
+}
+
+class SelectOption {
+  final String label;
+  final String value;
+
+  const SelectOption({
+    required this.label,
+    required this.value,
+  });
+}
 
 class InputConfig {
   final String key;
   final String label;
   final String? placeholder;
-  final bool isPassword;
-  final TextInputType keyboardType;
-  final String? Function(String?)? validator;
   final IconData? icon;
-
+  final bool isPassword;
+  final TextInputType? keyboardType;
   final InputType type;
-  final List<String>? items;
+  final List<SelectOption>? items;
+  final bool isMultiple;
+  final String? Function(String?)? validator;
 
-  InputConfig({
+  const InputConfig({
     required this.key,
     required this.label,
     this.placeholder,
-    this.isPassword = false,
-    this.keyboardType = TextInputType.text,
-    this.validator,
     this.icon,
+    this.isPassword = false,
+    this.keyboardType,
     this.type = InputType.text,
     this.items,
+    this.isMultiple = false,
+    this.validator,
   });
 }

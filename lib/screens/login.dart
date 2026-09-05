@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peneiras/models/requests/login_requests.dart';
 
 import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/models/inputs.dart';
@@ -8,7 +9,7 @@ import '../constants/app_colors.dart';
 
 import 'package:peneiras/layout/screen_frame.dart';
 
-import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/widgets/form/dynamic_form.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -84,7 +85,14 @@ class LoginForm extends StatelessWidget {
         try {
           final authService = AuthService();
 
-          await authService.login(email: email, password: password);
+          final loginBody = LoginRequest(
+            email: email,
+            password: password,
+          );
+
+          await authService.login(loginBody);
+
+          await authService.login(loginBody);
 
           if (context.mounted) {
             context.go("/home");

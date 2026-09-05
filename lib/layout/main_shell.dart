@@ -47,7 +47,9 @@ class _AddPeneiraButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        context.go("/add-peneira");
+      },
       child: Container(
         width: 35,
         height: 35,

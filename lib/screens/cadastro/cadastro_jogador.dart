@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/models/input_config.dart';
-import 'package:peneiras/models/bodys/cadastro_body.dart';
+import 'package:peneiras/models/requests/cadastro_requests.dart';
 import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/utils/app_date_utils.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
 
-import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/widgets/form/dynamic_form.dart';
 import 'package:peneiras/models/inputs.dart';
 
 class CadastroJogadorScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class CadastroJogadorScreen extends StatefulWidget {
 
 class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
   int _currentStep = 0;
-  final Map<String, String> _formData = {};
+  final Map<String, dynamic> _formData = {};
 
   final List<String> _subtitles = [
     "Dados pessoais\npreencha seus dados basicos.",
@@ -37,14 +37,14 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
     }
   }
 
-  void _handleDadosPessoais(Map<String, String> data) {
+  void _handleDadosPessoais(Map<String, dynamic> data) {
     _formData.addAll(data);
     setState(() {
       _currentStep = 1;
     });
   }
 
-  void _handlePosicao(Map<String, String> data) {
+  void _handlePosicao(Map<String, dynamic> data) {
     _formData.addAll(data);
     setState(() {
       _currentStep = 2;
@@ -61,7 +61,7 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
         return _CategoriaStep(onSubmit: (data) async {
           _formData.addAll(data);
 
-          final Map<String, String> dataParaEnvio = Map.from(_formData);
+          final Map<String, dynamic> dataParaEnvio = Map.from(_formData);
           if (dataParaEnvio.containsKey('birthDate')) {
             dataParaEnvio['birthDate'] =
                 AppDateUtils.toApiFormat(dataParaEnvio['birthDate']!);
@@ -70,7 +70,7 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
           try {
             final authService = AuthService();
 
-            final playerBody = CadastroPlayerBody.fromMap(dataParaEnvio);
+            final playerBody = CreatePlayerRequest.fromJson(dataParaEnvio);
 
             await authService.createPlayer(playerBody);
 
@@ -112,7 +112,7 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
 }
 
 class _DadosPessoaisStep extends StatelessWidget {
-  final Function(Map<String, String>) onSubmit;
+  final Function(Map<String, dynamic>) onSubmit;
 
   const _DadosPessoaisStep({required this.onSubmit});
 
@@ -131,7 +131,7 @@ class _DadosPessoaisStep extends StatelessWidget {
 }
 
 class _PosicaoStep extends StatelessWidget {
-  final Function(Map<String, String>) onSubmit;
+  final Function(Map<String, dynamic>) onSubmit;
 
   const _PosicaoStep({required this.onSubmit});
 
@@ -140,13 +140,14 @@ class _PosicaoStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        dateInput,
+        birthDateInput,
         positionInput,
         InputConfig(
-            key: "dominantFoot",
-            label: "Pé dominante",
-            type: InputType.select,
-            items: ["DIREITO", "ESQUERDO", "AMBOS"]),
+          key: "dominantFoot",
+          label: "Pé dominante",
+          type: InputType.select,
+          items: DominantFootType.values.map((e) => e.toOption()).toList(),
+        ),
       ],
       onSubmit: onSubmit,
     );
@@ -154,7 +155,7 @@ class _PosicaoStep extends StatelessWidget {
 }
 
 class _CategoriaStep extends StatelessWidget {
-  final Function(Map<String, String>) onSubmit;
+  final Function(Map<String, dynamic>) onSubmit;
 
   const _CategoriaStep({required this.onSubmit});
 

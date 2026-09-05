@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:peneiras/models/bodys/cadastro_body.dart';
+import 'package:peneiras/models/requests/cadastro_requests.dart';
 import 'package:peneiras/models/input_config.dart';
 
 import 'package:peneiras/services/auth_service.dart';
-import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/widgets/form/dynamic_form.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
 import 'package:peneiras/models/inputs.dart';
 
@@ -18,7 +18,7 @@ class CadastroTimeScreen extends StatefulWidget {
 
 class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
   int _currentStep = 0;
-  final Map<String, String> _formData = {};
+  final Map<String, dynamic> _formData = {};
 
   final List<String> _subtitles = [
     "Dados pessoais\npreencha seus dados basicos.",
@@ -35,7 +35,7 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
     }
   }
 
-  void _handleDadosPessoais(Map<String, String> data) {
+  void _handleDadosPessoais(Map<String, dynamic> data) {
     _formData.addAll(data);
     setState(() {
       _currentStep = 1;
@@ -52,12 +52,12 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
 
           print(_formData);
 
-          final Map<String, String> dataParaEnvio = Map.from(_formData);
+          final Map<String, dynamic> dataParaEnvio = Map.from(_formData);
 
           try {
             final authService = AuthService();
 
-            final clubBody = CadastroClubBody.fromMap(dataParaEnvio);
+            final clubBody = CreateClubRequest.fromJson(dataParaEnvio);
 
             await authService.createClub(clubBody);
 
@@ -99,7 +99,7 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
 }
 
 class _DadosPessoaisTimeStep extends StatelessWidget {
-  final Function(Map<String, String>) onSubmit;
+  final Function(Map<String, dynamic>) onSubmit;
 
   const _DadosPessoaisTimeStep({required this.onSubmit});
 
@@ -119,7 +119,7 @@ class _DadosPessoaisTimeStep extends StatelessWidget {
 }
 
 class _ContatoTimeStep extends StatelessWidget {
-  final Function(Map<String, String>) onSubmit;
+  final Function(Map<String, dynamic>) onSubmit;
 
   const _ContatoTimeStep({required this.onSubmit});
 
@@ -127,7 +127,7 @@ class _ContatoTimeStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicForm(
       submitText: "Finalizar",
-      inputs: [
+      inputs: const [
         InputConfig(
           key: "phone",
           label: "Telefone",

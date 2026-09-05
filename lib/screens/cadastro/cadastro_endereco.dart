@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/models/input_config.dart';
-import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/widgets/form/dynamic_form.dart';
 
 class CadastroEnderecoScreen extends StatelessWidget {
   const CadastroEnderecoScreen({super.key});
@@ -37,7 +37,7 @@ class CadastroEnderecoForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicForm(
         submitText: "Finalizar",
-        inputs: [
+        inputs: const [
           InputConfig(
               key: "endereco",
               label: "Endereço",

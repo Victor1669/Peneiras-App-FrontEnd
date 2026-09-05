@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:peneiras/models/requests/serializable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+typedef FromJson<T> = T Function(Map<String, dynamic> json);
 
 class ApiService {
   late final Dio _dio;
@@ -10,6 +13,8 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
     ));
 
     _dio.interceptors.add(
@@ -35,19 +40,23 @@ class ApiService {
   Future<T> request<T>({
     required String path,
     required String method,
-    dynamic data,
+    Serializable? data,
     Map<String, dynamic>? queryParameters,
-    required T Function(dynamic json) fromJson,
+    required FromJson<T> fromJson,
   }) async {
     try {
       final response = await _dio.request(
         path,
-        data: data,
+        data: data?.toJson(),
         queryParameters: queryParameters,
         options: Options(method: method),
       );
 
-      return fromJson(response.data);
+      final responseData = response.data is Map<String, dynamic>
+          ? response.data as Map<String, dynamic>
+          : <String, dynamic>{};
+
+      return fromJson(responseData);
     } on DioException catch (e) {
       final String errorMessage =
           e.response?.data?['message'] ?? 'Erro de conexão com o servidor';

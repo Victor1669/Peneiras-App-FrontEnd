@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/models/input_config.dart';
 
-import 'package:peneiras/widgets/dynamic_form.dart';
+import 'package:peneiras/widgets/form/dynamic_form.dart';
 import 'package:peneiras/models/inputs.dart';
 import 'package:peneiras/widgets/photo_container.dart';
 import 'package:peneiras/widgets/transparent_button.dart';

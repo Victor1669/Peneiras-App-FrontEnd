@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:peneiras/app_router.dart';
 
 import 'package:peneiras/utils/preferences_helper.dart';
+import 'package:peneiras/utils/snackbar_helper.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
       scrollBehavior:
           const MaterialScrollBehavior().copyWith(scrollbars: false),
       builder: (context, child) {

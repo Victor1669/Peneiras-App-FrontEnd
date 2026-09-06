@@ -5,7 +5,7 @@ description: "Peneiras App FrontEnd"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # Versão do app
-version: 1.0.6
+version: 1.0.7
 
 environment:
   sdk: '>=3.4.0 <4.0.0'

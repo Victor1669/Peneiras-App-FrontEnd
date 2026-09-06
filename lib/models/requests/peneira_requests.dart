@@ -55,9 +55,7 @@ class CreatePeneiraRequest implements Serializable {
       'documents': documents.value,
       'hour': hour,
       'modality': modality.value,
-      'uniforms': uniforms
-          .map((e) => e.value)
-          .toList(), // ← envia como lista de strings
+      'uniforms': uniforms.map((e) => e.value).toList(),
     };
   }
 }

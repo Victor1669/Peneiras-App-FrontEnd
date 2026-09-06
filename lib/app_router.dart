@@ -10,7 +10,6 @@ import './screens/cadastro/cadastro_endereco.dart';
 import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
 import './screens/cadastro/cadastro_jogador.dart';
-import "./screens/cadastro/upload_photo.dart";
 import './screens/cadastro/cadsatro_sucesso.dart';
 
 import 'package:peneiras/screens/content/home.dart';
@@ -39,10 +38,6 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'time',
           builder: (context, state) => const CadastroTimeScreen(),
-        ),
-        GoRoute(
-          path: 'upload-photo',
-          builder: (context, state) => const UploadPhotoScreen(),
         ),
         GoRoute(
           path: 'endereco',

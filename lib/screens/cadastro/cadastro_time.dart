@@ -3,11 +3,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/models/requests/cadastro_requests.dart';
 import 'package:peneiras/models/input_config.dart';
+import 'package:peneiras/models/inputs.dart';
 
-import 'package:peneiras/services/auth_service.dart';
+import 'package:peneiras/services/club_service.dart';
+
 import 'package:peneiras/widgets/form/dynamic_form.dart';
 import 'package:peneiras/layout/multi_step_scaffold.dart';
-import 'package:peneiras/models/inputs.dart';
 
 class CadastroTimeScreen extends StatefulWidget {
   const CadastroTimeScreen({super.key});
@@ -55,14 +56,15 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
           final Map<String, dynamic> dataParaEnvio = Map.from(_formData);
 
           try {
-            final authService = AuthService();
+            final clubService = ClubService();
 
             final clubBody = CreateClubRequest.fromJson(dataParaEnvio);
 
-            await authService.createClub(clubBody);
+            await clubService.create(clubBody);
 
             if (!mounted) return;
 
+            // Sucesso
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Clube criado com sucesso!"),
@@ -70,17 +72,8 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
               ),
             );
 
-            context.go("/cadastro/upload-photo");
-          } catch (e) {
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.toString().replaceAll('Exception: ', '')),
-                backgroundColor: Colors.redAccent,
-              ),
-            );
-          }
+            context.push('/cadastro/endereco');
+          } catch (_) {}
         });
     }
   }

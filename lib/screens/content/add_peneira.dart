@@ -57,10 +57,11 @@ class _AddPeneiraScreenState extends State<AddPeneiraScreen> {
           try {
             final peneiraService = PeneiraService();
 
+            await peneiraService.createPeneira(dataParaEnvio);
+
             if (!mounted) return;
 
-            peneiraService.createPeneira(dataParaEnvio);
-
+            // Sucesso
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Peneira publicada com sucesso!"),
@@ -69,16 +70,7 @@ class _AddPeneiraScreenState extends State<AddPeneiraScreen> {
             );
 
             context.go("/home");
-          } catch (e) {
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.toString().replaceAll('Exception: ', '')),
-                backgroundColor: Colors.redAccent,
-              ),
-            );
-          }
+          } catch (_) {}
         });
     }
   }

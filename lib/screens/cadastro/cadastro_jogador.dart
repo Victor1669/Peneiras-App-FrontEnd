@@ -3,12 +3,13 @@ import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/models/input_config.dart';
 import 'package:peneiras/models/requests/cadastro_requests.dart';
-import 'package:peneiras/services/auth_service.dart';
-import 'package:peneiras/utils/app_date_utils.dart';
-import 'package:peneiras/layout/multi_step_scaffold.dart';
-
-import 'package:peneiras/widgets/form/dynamic_form.dart';
 import 'package:peneiras/models/inputs.dart';
+
+import 'package:peneiras/services/player_service.dart';
+import 'package:peneiras/utils/app_date_utils.dart';
+
+import 'package:peneiras/layout/multi_step_scaffold.dart';
+import 'package:peneiras/widgets/form/dynamic_form.dart';
 
 class CadastroJogadorScreen extends StatefulWidget {
   const CadastroJogadorScreen({super.key});
@@ -68,11 +69,11 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
           }
 
           try {
-            final authService = AuthService();
+            final playerService = PlayerService();
 
             final playerBody = CreatePlayerRequest.fromJson(dataParaEnvio);
 
-            await authService.createPlayer(playerBody);
+            await playerService.create(playerBody);
 
             if (!mounted) return;
 
@@ -83,17 +84,8 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
               ),
             );
 
-            context.go("/cadastro/upload-photo");
-          } catch (e) {
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.toString().replaceAll('Exception: ', '')),
-                backgroundColor: Colors.redAccent,
-              ),
-            );
-          }
+            context.push('/cadastro/endereco');
+          } catch (_) {}
         });
     }
   }

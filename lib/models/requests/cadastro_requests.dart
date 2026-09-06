@@ -101,3 +101,18 @@ class CreateUsersResponse {
     return CreateUsersResponse();
   }
 }
+
+class UploadPhotoRequest extends Serializable {
+  @override
+  Map<String, dynamic> toJson() {
+    throw UnimplementedError();
+  }
+}
+
+class UploadPhotoResponse {
+  UploadPhotoResponse();
+
+  factory UploadPhotoResponse.fromJson(Map<String, dynamic> json) {
+    return UploadPhotoResponse();
+  }
+}

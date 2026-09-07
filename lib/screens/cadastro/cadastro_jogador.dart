@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:peneiras/models/input_config.dart';
 import 'package:peneiras/models/requests/cadastro_requests.dart';
@@ -84,7 +85,14 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
               ),
             );
 
-            context.push('/cadastro/endereco');
+            final prefs = await SharedPreferences.getInstance();
+
+            final bool hasSeenTutorial =
+                prefs.getBool('ja_viu_tutorial_home') ?? false;
+
+            if (mounted) {
+              context.replace(hasSeenTutorial ? '/onboarding' : '/home');
+            }
           } catch (_) {}
         });
     }

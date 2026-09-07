@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:peneiras/services/auth_service.dart';
-import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/constants/app_colors.dart';
 
-import 'club_profile.dart';
-import 'player_profile.dart';
+import 'package:peneiras/services/auth_service.dart';
+
+import 'package:peneiras/layout/screen_frame.dart';
+import 'package:peneiras/layout/perfil/club_profile.dart';
+import 'package:peneiras/layout/perfil/player_profile.dart';
 
 class PerfilScreen extends StatelessWidget {
   final bool isClub;

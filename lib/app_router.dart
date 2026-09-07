@@ -1,12 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/main_shell.dart';
-import 'package:peneiras/screens/content/add_peneira.dart';
 
 import "./screens/initial.dart";
 import "./screens/login.dart";
 
-import './screens/cadastro/cadastro_endereco.dart';
 import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
 import './screens/cadastro/cadastro_jogador.dart';
@@ -16,8 +15,16 @@ import 'package:peneiras/screens/content/home.dart';
 import 'screens/content/profile/perfil.dart';
 import 'package:peneiras/screens/content/profile/editar_perfil.dart';
 
+import 'package:peneiras/screens/content/add_peneira.dart';
+import 'package:peneiras/screens/onboarding/fake_home.dart';
+import 'package:peneiras/screens/onboarding/fake_perfil.dart';
+
+Page<void> _noTransitionPage(Widget child) {
+  return NoTransitionPage(child: child);
+}
+
 final GoRouter router = GoRouter(
-  initialLocation: "/home",
+  initialLocation: "/onboarding",
   routes: [
     GoRoute(
       path: '/',
@@ -40,10 +47,6 @@ final GoRouter router = GoRouter(
           builder: (context, state) => const CadastroTimeScreen(),
         ),
         GoRoute(
-          path: 'endereco',
-          builder: (context, state) => const CadastroEnderecoScreen(),
-        ),
-        GoRoute(
           path: 'sucesso',
           builder: (context, state) => const CadastroSucessoScreen(),
         ),
@@ -51,22 +54,57 @@ final GoRouter router = GoRouter(
     ),
     ShellRoute(
       builder: (context, state, child) {
-        return MainShell(child: child);
+        return MainShell(
+          baseRoute: "home",
+          child: child,
+        );
       },
       routes: [
-        GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
         GoRoute(
-            path: '/add-peneira',
-            builder: (context, state) => const AddPeneiraScreen()),
+          path: '/home',
+          pageBuilder: (context, state) =>
+              _noTransitionPage(const HomeScreen()),
+        ),
         GoRoute(
-            path: '/perfil',
-            builder: (context, state) => const PerfilScreen(),
-            routes: [
-              GoRoute(
-                path: 'editar-perfil',
-                builder: (context, state) => const EditarPerfilScreen(),
-              ),
-            ]),
+          path: '/home/add-peneira',
+          pageBuilder: (context, state) =>
+              _noTransitionPage(const AddPeneiraScreen()),
+        ),
+        GoRoute(
+          path: '/home/perfil',
+          pageBuilder: (context, state) =>
+              _noTransitionPage(const PerfilScreen()),
+          routes: [
+            GoRoute(
+              path: '/home/editar-perfil',
+              pageBuilder: (context, state) =>
+                  _noTransitionPage(const EditarPerfilScreen()),
+            ),
+          ],
+        ),
+      ],
+    ),
+    ShellRoute(
+      builder: (context, state, child) {
+        return MainShell(baseRoute: "onboarding", child: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/onboarding',
+          pageBuilder: (context, state) => _noTransitionPage(FakeHomeScreen()),
+        ),
+        GoRoute(
+          path: '/onboarding/perfil',
+          pageBuilder: (context, state) =>
+              _noTransitionPage(const FakePerfilScreen()),
+          routes: [
+            GoRoute(
+              path: '/onboarding/editar-perfil',
+              pageBuilder: (context, state) =>
+                  _noTransitionPage(const EditarPerfilScreen()),
+            ),
+          ],
+        ),
       ],
     ),
   ],

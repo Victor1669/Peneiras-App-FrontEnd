@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:peneiras/layout/home_tabbar.dart';
+import 'package:peneiras/utils/global_keys.dart';
 import '../constants/app_colors.dart';
 
 class MainShell extends StatelessWidget {
+  final String baseRoute;
   final Widget child;
-  const MainShell({super.key, required this.child});
+
+  const MainShell({super.key, required this.baseRoute, required this.child});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey tabbarKey =
+        baseRoute == "home" ? homeTabbarKey : onboardingTabbarKey;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: child,
@@ -20,19 +27,18 @@ class MainShell extends StatelessWidget {
             topRight: Radius.circular(25),
           ),
         ),
-        child: const SafeArea(
+        child: SafeArea(
           top: false,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                height: 15,
+              const SizedBox(height: 15),
+              _AddPeneiraButton(baseRoute: baseRoute),
+              const SizedBox(height: 20),
+              HomeTabbar(
+                baseRoute: baseRoute,
+                tabbarKey: tabbarKey,
               ),
-              _AddPeneiraButton(),
-              SizedBox(
-                height: 20,
-              ),
-              _HomeTabbar()
             ],
           ),
         ),
@@ -42,13 +48,15 @@ class MainShell extends StatelessWidget {
 }
 
 class _AddPeneiraButton extends StatelessWidget {
-  const _AddPeneiraButton();
+  final String baseRoute;
+
+  const _AddPeneiraButton({required this.baseRoute});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.go("/add-peneira");
+        context.go('/$baseRoute/add-peneira');
       },
       child: Container(
         width: 35,
@@ -71,64 +79,5 @@ class _AddPeneiraButton extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _HomeTabbar extends StatelessWidget {
-  const _HomeTabbar();
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(25),
-        topRight: Radius.circular(25),
-      ),
-      child: BottomNavigationBar(
-        backgroundColor: Colors.transparent,
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (index) => _onItemTapped(index, context),
-        selectedItemColor: AppColors.lightGreen,
-        unselectedItemColor: Colors.white54,
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Inscrições',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-      ),
-    );
-  }
-
-  static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.path;
-    if (location.startsWith('/home')) return 0;
-    if (location.startsWith('/inscricoes')) return 1;
-    if (location.startsWith('/perfil')) return 2;
-    return 0;
-  }
-
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        context.go('/home');
-        break;
-      case 1:
-        context.go('/inscricoes');
-        break;
-      case 2:
-        context.go('/perfil');
-        break;
-    }
   }
 }

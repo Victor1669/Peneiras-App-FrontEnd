@@ -59,7 +59,7 @@ class ApiService {
     required String method,
     Serializable? data,
     Map<String, dynamic>? queryParameters,
-    required FromJson<T> fromJson,
+    required T Function(dynamic json) fromJson,
     bool showErrorSnackBar = false,
   }) async {
     try {
@@ -70,17 +70,13 @@ class ApiService {
         options: Options(method: method),
       );
 
-      final responseData = response.data is Map<String, dynamic>
-          ? response.data as Map<String, dynamic>
-          : <String, dynamic>{};
-
-      return fromJson(responseData);
+      return fromJson(response.data);
     } on DioException catch (e) {
       final errorMessage = _extractErrorMessage(e);
       print('Erro de API ($method $path): $errorMessage');
 
       if (showErrorSnackBar) {
-        showAppSnackBar(errorMessage, isError: true);
+        showAppSnackBar(errorMessage);
       }
 
       throw Exception(errorMessage);

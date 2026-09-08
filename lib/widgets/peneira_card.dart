@@ -31,10 +31,20 @@ class PeneiraCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                peneira.logoAsset,
+                peneira.clubeImagem?.isNotEmpty == true
+                    ? peneira.clubeImagem!
+                    : "assets/logo.png",
                 width: 56,
                 height: 56,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    "assets/logo.png",
+                    width: 56,
+                    height: 56,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
             const SizedBox(width: 16),
@@ -44,7 +54,7 @@ class PeneiraCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    peneira.clube,
+                    peneira.clubeNome,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -54,23 +64,11 @@ class PeneiraCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(
-                        peneira.distancia,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.7),
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        '  •  ',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.7),
-                          fontSize: 14,
-                        ),
-                      ),
                       Expanded(
                         child: Text(
-                          peneira.local,
+                          peneira.endereco!.isEmpty
+                              ? "Sem endereço"
+                              : "Peneira de ${peneira.endereco!}",
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.7),
                             fontSize: 14,

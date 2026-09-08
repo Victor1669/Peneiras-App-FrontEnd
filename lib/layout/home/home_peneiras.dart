@@ -1,37 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/widgets/peneira_card.dart';
 
-List<PeneiraCard> peneiras = const [
-  PeneiraCard(
-    peneira: PeneiraModel(
-        titulo: "Peneira Sub-17",
-        clube: "peneiras f.c",
-        local: "São Paulo - SP",
-        vagas: "40 vagas",
-        distancia: "5 km",
-        data: "25 de maio de 2026",
-        logoAsset: "assets/logo.png"),
-  ),
-  PeneiraCard(
-    peneira: PeneiraModel(
-        titulo: "Peneira Sub-15",
-        clube: "peneiras f.c",
-        local: "São Paulo - SP",
-        vagas: "30 vagas",
-        distancia: "7 km",
-        data: "25 de junho de 2026",
-        logoAsset: "assets/logo.png"),
-  )
-];
-
 class HomePeneiras extends StatelessWidget {
-  const HomePeneiras({super.key});
+  final List<PeneiraModel> peneiras;
+  final bool isLoading;
+
+  const HomePeneiras({
+    super.key,
+    required this.peneiras,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (peneiras.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 20,
@@ -44,22 +38,18 @@ class HomePeneiras extends StatelessWidget {
             ],
           ),
         ),
-        Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: peneiras.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: peneiras[index],
-                );
-              },
-            ),
-          ],
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: peneiras.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: PeneiraCard(peneira: peneiras[index]),
+            );
+          },
         ),
-        const SizedBox(height: 20)
+        const SizedBox(height: 20),
       ],
     );
   }

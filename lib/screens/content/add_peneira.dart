@@ -57,7 +57,7 @@ class _AddPeneiraScreenState extends State<AddPeneiraScreen> {
           try {
             final peneiraService = PeneiraService();
 
-            await peneiraService.createPeneira(dataParaEnvio);
+            await peneiraService.create(dataParaEnvio);
 
             if (!mounted) return;
 

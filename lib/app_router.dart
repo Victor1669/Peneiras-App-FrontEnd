@@ -24,7 +24,7 @@ Page<void> _noTransitionPage(Widget child) {
 }
 
 final GoRouter router = GoRouter(
-  initialLocation: "/onboarding",
+  initialLocation: "/home",
   routes: [
     GoRoute(
       path: '/',

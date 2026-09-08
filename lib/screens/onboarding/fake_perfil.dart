@@ -14,7 +14,7 @@ import 'package:peneiras/layout/perfil/player_profile.dart';
 class FakePerfilScreen extends StatefulWidget {
   final bool isClub;
 
-  const FakePerfilScreen({super.key, this.isClub = true});
+  const FakePerfilScreen({super.key, this.isClub = false});
 
   @override
   State<FakePerfilScreen> createState() => _FakePerfilScreenState();

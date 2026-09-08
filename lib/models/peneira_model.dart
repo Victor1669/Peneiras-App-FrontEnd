@@ -1,21 +1,67 @@
+import 'package:peneiras/models/inputs.dart';
+
 class PeneiraModel {
-  final String titulo;
-  final String clube;
-  final String local;
-  final String vagas;
-  final String distancia;
-  final String data;
-  final String logoAsset;
-  final bool isNovo;
+  final String id;
+  final CategoryType category;
+  final ModalityType modality;
+  final String date;
+  final String hour;
+  final List<UniformType> uniforms;
+  final DocumentType documents;
+  final String about;
+  // Campos de outras tabelas
+  final String clubeNome;
+  final String? clubeImagem;
+  final String? endereco;
 
   const PeneiraModel({
-    required this.titulo,
-    required this.clube,
-    required this.local,
-    required this.vagas,
-    required this.distancia,
-    required this.data,
-    required this.logoAsset,
-    this.isNovo = true,
+    required this.id,
+    required this.about,
+    required this.category,
+    required this.date,
+    required this.documents,
+    required this.hour,
+    required this.modality,
+    required this.uniforms,
+    // Campos de outras tabelas
+    required this.clubeNome,
+    required this.clubeImagem,
+    required this.endereco,
   });
+
+  factory PeneiraModel.fromJson(Map<String, dynamic> json) {
+    return PeneiraModel(
+      id: json['id']?.toString() ?? '',
+      about: json['about']?.toString() ?? '',
+      category: CategoryType.values.firstWhere(
+        (e) => e.name == json['category'],
+        orElse: () => CategoryType.values.first,
+      ),
+      date: json['date']?.toString() ?? '',
+      documents: DocumentType.values.firstWhere(
+        (e) => e.name == json['documents'],
+        orElse: () => DocumentType.values.first,
+      ),
+      hour: json['hour']?.toString() ?? '',
+      modality: ModalityType.values.firstWhere(
+        (e) => e.name == json['modality'],
+        orElse: () => ModalityType.values.first,
+      ),
+      uniforms: (json['uniforms'] as List<dynamic>? ?? [])
+          .map((item) => UniformType.values.firstWhere(
+                (e) => e.name == item,
+                orElse: () => UniformType.values.first,
+              ))
+          .toList(),
+      // Campos de outras tabelas
+      clubeImagem: json['clubeImagem']?.toString() ?? '',
+      clubeNome: json['clubeNome']?.toString() ?? '',
+      endereco: json['endereco']?.toString() ?? '',
+    );
+  }
+
+  @override
+  String toString() {
+    return 'PeneiraModel(id: $id, category: $category, modality: $modality, date: $date, hour: $hour, uniforms: $uniforms, documents: $documents, about: $about, clubeNome: $clubeNome, clubeImagem: $clubeImagem, endereco: $endereco)';
+  }
 }

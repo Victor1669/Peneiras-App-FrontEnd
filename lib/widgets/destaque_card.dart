@@ -5,12 +5,12 @@ import 'package:peneiras/models/peneira_model.dart';
 import '../constants/app_colors.dart';
 
 class DestaqueCard extends StatelessWidget {
-  final PeneiraModel model;
+  final PeneiraModel destaque;
   final VoidCallback? onTap;
 
   const DestaqueCard({
     super.key,
-    required this.model,
+    required this.destaque,
     this.onTap,
   });
 
@@ -42,12 +42,15 @@ class DestaqueCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              if (model.isNovo) const _BadgeNovo(),
-              _Header(model: model),
-              _InfoRow(icon: Icons.location_on, text: model.local),
-              _InfoRow(icon: Icons.group, text: model.vagas),
-              _InfoRow(icon: Icons.directions_run, text: model.distancia),
-              _InfoRow(icon: Icons.calendar_today, text: model.data),
+              const _BadgeNovo(),
+              _Header(model: destaque),
+              _InfoRow(
+                icon: Icons.location_on,
+                text: destaque.endereco!.isEmpty
+                    ? "Sem endereço"
+                    : destaque.endereco!,
+              ),
+              _InfoRow(icon: Icons.calendar_today, text: destaque.date),
               _BotaoVerDetalhes(onPressed: onTap),
             ],
           ),
@@ -91,8 +94,22 @@ class _Header extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.asset(model.logoAsset,
-              width: 60, height: 60, fit: BoxFit.cover),
+          child: Image.asset(
+            model.clubeImagem?.isNotEmpty == true
+                ? model.clubeImagem!
+                : "assets/logo.png",
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                "assets/logo.png",
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+              );
+            },
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -100,7 +117,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                model.titulo,
+                "Peneira de ${model.clubeNome}",
                 style: GoogleFonts.judson(
                   fontSize: 22,
                   color: Colors.white,
@@ -108,7 +125,7 @@ class _Header extends StatelessWidget {
                 ),
               ),
               Text(
-                model.clube,
+                model.clubeNome,
                 style: GoogleFonts.judson(
                   fontSize: 16,
                   color: AppColors.lightGreen,

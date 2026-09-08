@@ -2,6 +2,7 @@ import 'package:peneiras/models/inputs.dart';
 import 'package:peneiras/models/requests/serializable.dart';
 
 class CreatePeneiraRequest implements Serializable {
+  final String id;
   final CategoryType category;
   final ModalityType modality;
   final String date;
@@ -11,6 +12,7 @@ class CreatePeneiraRequest implements Serializable {
   final String about;
 
   const CreatePeneiraRequest({
+    required this.id,
     required this.about,
     required this.category,
     required this.date,
@@ -22,24 +24,25 @@ class CreatePeneiraRequest implements Serializable {
 
   factory CreatePeneiraRequest.fromJson(Map<String, dynamic> json) {
     return CreatePeneiraRequest(
-      about: json['about'] ?? '',
+      id: json['id']?.toString() ?? '',
+      about: json['about']?.toString() ?? '',
       category: CategoryType.values.firstWhere(
-        (e) => e.value == json['category'],
+        (e) => e.name == json['category'],
         orElse: () => CategoryType.values.first,
       ),
-      date: json['date'] ?? '',
+      date: json['date']?.toString() ?? '',
       documents: DocumentType.values.firstWhere(
-        (e) => e.value == json['documents'],
+        (e) => e.name == json['documents'],
         orElse: () => DocumentType.values.first,
       ),
-      hour: json['hour'] ?? '',
+      hour: json['hour']?.toString() ?? '',
       modality: ModalityType.values.firstWhere(
-        (e) => e.value == json['modality'],
+        (e) => e.name == json['modality'],
         orElse: () => ModalityType.values.first,
       ),
       uniforms: (json['uniforms'] as List<dynamic>? ?? [])
-          .map((e) => UniformType.values.firstWhere(
-                (type) => type.value == e,
+          .map((item) => UniformType.values.firstWhere(
+                (e) => e.name == item,
                 orElse: () => UniformType.values.first,
               ))
           .toList(),
@@ -57,47 +60,5 @@ class CreatePeneiraRequest implements Serializable {
       'modality': modality.value,
       'uniforms': uniforms.map((e) => e.value).toList(),
     };
-  }
-}
-
-class CreatePeneiraResponse extends CreatePeneiraRequest {
-  final String id;
-
-  const CreatePeneiraResponse({
-    required this.id,
-    required super.about,
-    required super.category,
-    required super.date,
-    required super.documents,
-    required super.hour,
-    required super.modality,
-    required super.uniforms,
-  });
-
-  factory CreatePeneiraResponse.fromJson(Map<String, dynamic> json) {
-    return CreatePeneiraResponse(
-      id: json['id'] ?? '',
-      about: json['about'] ?? '',
-      category: CategoryType.values.firstWhere(
-        (e) => e.value == json['category'],
-        orElse: () => CategoryType.values.first,
-      ),
-      date: json['date'] ?? '',
-      documents: DocumentType.values.firstWhere(
-        (e) => e.value == json['documents'],
-        orElse: () => DocumentType.values.first,
-      ),
-      hour: json['hour'] ?? '',
-      modality: ModalityType.values.firstWhere(
-        (e) => e.value == json['modality'],
-        orElse: () => ModalityType.values.first,
-      ),
-      uniforms: (json['uniforms'] as List<dynamic>? ?? [])
-          .map((e) => UniformType.values.firstWhere(
-                (type) => type.value == e,
-                orElse: () => UniformType.values.first,
-              ))
-          .toList(),
-    );
   }
 }

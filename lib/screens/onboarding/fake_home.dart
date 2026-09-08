@@ -41,7 +41,8 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
 
   Future<void> _checkFirstTimeAndShowTutorial() async {
     final prefs = await SharedPreferences.getInstance();
-    final bool hasSeenTutorial = false;
+    final bool hasSeenTutorial =
+        prefs.getBool('ja_viu_tutorial_perfil') ?? false;
 
     if (!hasSeenTutorial) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

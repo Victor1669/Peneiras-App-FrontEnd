@@ -17,7 +17,7 @@ class AuthService {
         path: "/auth/login",
         method: "POST",
         data: body,
-        fromJson: LoginResponse.fromJson,
+        fromJson: (json) => LoginResponse.fromJson(json),
         showErrorSnackBar: true);
 
     await PreferencesHelper.saveString('auth_token', response.token);

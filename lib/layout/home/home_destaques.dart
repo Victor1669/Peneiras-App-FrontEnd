@@ -1,41 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:peneiras/models/inputs.dart';
 
 import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/widgets/destaque_card.dart';
 
 final List<PeneiraModel> mockDestaques = [
   const PeneiraModel(
-      titulo: "Peneira Sub-17",
-      clube: "peneiras f.c",
-      local: "São Paulo - SP",
-      vagas: "40 vagas",
-      distancia: "5 km",
-      data: "25 de maio de 2026",
-      logoAsset: "assets/logo.png"),
+      id: "1",
+      about: "Teste",
+      category: CategoryType.futebol,
+      date: "2006-12-25",
+      documents: DocumentType.cpf,
+      hour: "15:00:00",
+      modality: ModalityType.campo,
+      uniforms: [UniformType.camisa],
+      clubeImagem: "",
+      clubeNome: "Teste",
+      endereco: "03257150"),
   const PeneiraModel(
-      titulo: "Peneira Sub-15",
-      clube: "peneiras f.c",
-      local: "São Paulo - SP",
-      vagas: "30 vagas",
-      distancia: "7 km",
-      data: "25 de junho de 2026",
-      logoAsset: "assets/logo.png"),
+      id: "1",
+      about: "Teste",
+      category: CategoryType.futebol,
+      date: "2006-12-25",
+      documents: DocumentType.cpf,
+      hour: "15:00:00",
+      modality: ModalityType.campo,
+      uniforms: [UniformType.camisa],
+      clubeImagem: "",
+      clubeNome: "Teste",
+      endereco: "03257150"),
 ];
 
-class HomeDestaques extends StatelessWidget {
+class HomeDestaques extends StatefulWidget {
   final List<PeneiraModel>? destaques;
+  final bool isLoading;
   final void Function(PeneiraModel model)? onTapDestaque;
 
   const HomeDestaques({
     super.key,
     this.destaques,
+    this.isLoading = false,
     this.onTapDestaque,
   });
 
   @override
+  State<HomeDestaques> createState() => _HomeDestaquesState();
+}
+
+class _HomeDestaquesState extends State<HomeDestaques> {
+  @override
   Widget build(BuildContext context) {
-    final List<PeneiraModel> data = destaques ?? mockDestaques;
+    final List<PeneiraModel> destaques = widget.destaques ?? mockDestaques;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,25 +65,28 @@ class HomeDestaques extends StatelessWidget {
             ],
           ),
         ),
-        Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final model = data[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: DestaqueCard(
-                    onTap: () => onTapDestaque?.call(model),
-                    model: model,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+        widget.isLoading
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: destaques.length,
+                itemBuilder: (context, index) {
+                  final model = destaques[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: DestaqueCard(
+                      onTap: () => widget.onTapDestaque?.call(model),
+                      destaque: model,
+                    ),
+                  );
+                },
+              ),
         const SizedBox(
           height: 20,
         )

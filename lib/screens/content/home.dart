@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:peneiras/models/peneira_model.dart';
+import 'package:peneiras/services/peneira_service.dart';
 
 import 'package:peneiras/layout/home/home_header.dart';
 import 'package:peneiras/layout/home/home_destaques.dart';
@@ -14,24 +16,58 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<PeneiraModel> destaques = [];
+  List<PeneiraModel> peneiras = [];
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-
-    _carregarEPrintarToken();
+    _carregarPeneiras();
   }
 
-  Future<void> _carregarEPrintarToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('auth_token');
+  Future<void> _carregarPeneiras() async {
+    setState(() => isLoading = true);
 
-    print("[DEBUG] Auth Token carregado na Home: $token");
+    try {
+      final todas = await PeneiraService().getAll();
 
-    if (token != null && mounted) {}
+      final agora = DateTime.now();
+      final limiteDestaque = agora.add(const Duration(days: 7));
+
+      final List<PeneiraModel> listaDestaques = [];
+      final List<PeneiraModel> listaPeneiras = [];
+
+      for (final peneira in todas) {
+        final dataPeneira = DateTime.tryParse(peneira.date);
+
+        if (dataPeneira != null &&
+            dataPeneira.isAfter(agora) &&
+            dataPeneira.isBefore(limiteDestaque)) {
+          listaDestaques.add(peneira);
+        } else {
+          listaPeneiras.add(peneira);
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          destaques = listaDestaques;
+          peneiras = listaPeneiras;
+        });
+      }
+    } catch (_) {
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool isEmpty = !isLoading && destaques.isEmpty && peneiras.isEmpty;
+
     return ScreenFrame(
       title: "",
       onBack: () {},
@@ -40,22 +76,35 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: const Icon(Icons.notifications),
         onPressed: () => print("Notificações clicadas"),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 20,
-        children: [
-          HomeHeader(),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const HomeDestaques(),
-                  const HomePeneiras(),
-                ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 20,
+          children: [
+            const HomeHeader(),
+            if (isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                child: Center(
+                  child: Text(
+                    "Nenhuma peneira disponível no momento.",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            else ...[
+              HomeDestaques(
+                destaques: destaques,
+                isLoading: isLoading,
               ),
-            ),
-          ),
-        ],
+              HomePeneiras(
+                peneiras: peneiras,
+                isLoading: isLoading,
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

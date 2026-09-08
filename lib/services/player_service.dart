@@ -9,7 +9,7 @@ class PlayerService {
         path: "/auth/register",
         method: "POST",
         data: body,
-        fromJson: CreateUsersResponse.fromJson,
+        fromJson: (json) => CreateUsersResponse.fromJson(json),
         showErrorSnackBar: true);
   }
 }

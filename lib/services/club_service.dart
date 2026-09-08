@@ -9,7 +9,7 @@ class ClubService {
       path: "/api/auth/clube/register",
       data: body,
       method: "POST",
-      fromJson: CreateUsersResponse.fromJson,
+      fromJson: (json) => CreateUsersResponse.fromJson(json),
     );
   }
 }

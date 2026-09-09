@@ -5,8 +5,8 @@ import 'package:peneiras/models/inputs.dart';
 import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/widgets/destaque_card.dart';
 
-final List<PeneiraModel> mockDestaques = [
-  const PeneiraModel(
+final List<PeneiraCardModel> mockDestaques = [
+  const PeneiraCardModel(
       id: "1",
       about: "Teste",
       category: CategoryType.futebol,
@@ -18,7 +18,7 @@ final List<PeneiraModel> mockDestaques = [
       clubeImagem: "",
       clubeNome: "Teste",
       endereco: "03257150"),
-  const PeneiraModel(
+  const PeneiraCardModel(
       id: "1",
       about: "Teste",
       category: CategoryType.futebol,
@@ -33,9 +33,9 @@ final List<PeneiraModel> mockDestaques = [
 ];
 
 class HomeDestaques extends StatefulWidget {
-  final List<PeneiraModel>? destaques;
+  final List<PeneiraCardModel>? destaques;
   final bool isLoading;
-  final void Function(PeneiraModel model)? onTapDestaque;
+  final void Function(PeneiraCardModel model)? onTapDestaque;
 
   const HomeDestaques({
     super.key,
@@ -51,7 +51,7 @@ class HomeDestaques extends StatefulWidget {
 class _HomeDestaquesState extends State<HomeDestaques> {
   @override
   Widget build(BuildContext context) {
-    final List<PeneiraModel> destaques = widget.destaques ?? mockDestaques;
+    final List<PeneiraCardModel> destaques = widget.destaques ?? mockDestaques;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

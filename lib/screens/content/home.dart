@@ -16,8 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<PeneiraModel> destaques = [];
-  List<PeneiraModel> peneiras = [];
+  List<PeneiraCardModel> destaques = [];
+  List<PeneiraCardModel> peneiras = [];
   bool isLoading = true;
 
   @override
@@ -35,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final agora = DateTime.now();
       final limiteDestaque = agora.add(const Duration(days: 7));
 
-      final List<PeneiraModel> listaDestaques = [];
-      final List<PeneiraModel> listaPeneiras = [];
+      final List<PeneiraCardModel> listaDestaques = [];
+      final List<PeneiraCardModel> listaPeneiras = [];
 
       for (final peneira in todas) {
         final dataPeneira = DateTime.tryParse(peneira.date);

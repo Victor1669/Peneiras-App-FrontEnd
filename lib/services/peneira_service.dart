@@ -14,13 +14,13 @@ class PeneiraService {
     );
   }
 
-  Future<List<PeneiraModel>> getAll() async {
-    return _apiService.request<List<PeneiraModel>>(
+  Future<List<PeneiraCardModel>> getAll() async {
+    return _apiService.request<List<PeneiraCardModel>>(
       path: "/peneiras",
       method: "GET",
       fromJson: (json) {
         final list = (json is List ? json : (json['data'] as List? ?? []));
-        return list.map((item) => PeneiraModel.fromJson(item)).toList();
+        return list.map((item) => PeneiraCardModel.fromJson(item)).toList();
       },
     );
   }

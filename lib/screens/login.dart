@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:peneiras/models/requests/login_requests.dart';
 import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/models/inputs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/app_colors.dart';
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/widgets/form/dynamic_form.dart';
@@ -83,6 +84,34 @@ class LoginScreenBody extends StatelessWidget {
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
 
+  Future<void> _handleSubmit(
+    BuildContext context,
+    Map<String, dynamic> data,
+  ) async {
+    final String email = data['email']?.toString() ?? '';
+    final String password = data['password']?.toString() ?? '';
+
+    try {
+      final authService = AuthService();
+
+      await authService.login(
+        LoginRequest(
+          email: email,
+          password: password,
+        ),
+      );
+
+      final prefs = await SharedPreferences.getInstance();
+
+      final bool hasSeenTutorial =
+          prefs.getBool('ja_viu_tutorial_home') ?? false;
+
+      if (context.mounted) {
+        context.replace(hasSeenTutorial ? '/onboarding' : '/home');
+      }
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return DynamicForm(
@@ -90,25 +119,7 @@ class LoginForm extends StatelessWidget {
         emailInput,
         passwordInput,
       ],
-      onSubmit: (data) async {
-        final String email = data['email']?.toString() ?? '';
-        final String password = data['password']?.toString() ?? '';
-
-        try {
-          final authService = AuthService();
-
-          await authService.login(
-            LoginRequest(
-              email: email,
-              password: password,
-            ),
-          );
-
-          if (context.mounted) {
-            context.go("/home");
-          }
-        } catch (_) {}
-      },
+      onSubmit: (data) => _handleSubmit(context, data),
     );
   }
 }

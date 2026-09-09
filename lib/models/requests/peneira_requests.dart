@@ -1,51 +1,27 @@
-import 'package:peneiras/models/inputs.dart';
+import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/models/requests/serializable.dart';
 
-class CreatePeneiraRequest implements Serializable {
-  final String id;
-  final CategoryType category;
-  final ModalityType modality;
-  final String date;
-  final String hour;
-  final List<UniformType> uniforms;
-  final DocumentType documents;
-  final String about;
-
+class CreatePeneiraRequest extends PeneiraModel implements Serializable {
   const CreatePeneiraRequest({
-    required this.id,
-    required this.about,
-    required this.category,
-    required this.date,
-    required this.documents,
-    required this.hour,
-    required this.modality,
-    required this.uniforms,
+    required super.about,
+    required super.category,
+    required super.date,
+    required super.documents,
+    required super.hour,
+    required super.modality,
+    required super.uniforms,
   });
 
   factory CreatePeneiraRequest.fromJson(Map<String, dynamic> json) {
+    final model = PeneiraCardModel.fromJson(json);
     return CreatePeneiraRequest(
-      id: json['id']?.toString() ?? '',
-      about: json['about']?.toString() ?? '',
-      category: CategoryType.values.firstWhere(
-        (e) => e.name == json['category'],
-        orElse: () => CategoryType.values.first,
-      ),
-      date: json['date']?.toString() ?? '',
-      documents: DocumentType.values.firstWhere(
-        (e) => e.name == json['documents'],
-        orElse: () => DocumentType.values.first,
-      ),
-      hour: json['hour']?.toString() ?? '',
-      modality: ModalityType.values.firstWhere(
-        (e) => e.name == json['modality'],
-        orElse: () => ModalityType.values.first,
-      ),
-      uniforms: (json['uniforms'] as List<dynamic>? ?? [])
-          .map((item) => UniformType.values.firstWhere(
-                (e) => e.name == item,
-                orElse: () => UniformType.values.first,
-              ))
-          .toList(),
+      about: model.about,
+      category: model.category,
+      date: model.date,
+      documents: model.documents,
+      hour: model.hour,
+      modality: model.modality,
+      uniforms: model.uniforms,
     );
   }
 

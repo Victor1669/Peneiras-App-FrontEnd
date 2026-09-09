@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:peneiras/models/requests/serializable.dart';
 import 'package:peneiras/utils/snackbar_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,7 +56,7 @@ class ApiService {
   Future<T> request<T>({
     required String path,
     required String method,
-    Serializable? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     required T Function(dynamic json) fromJson,
     bool showErrorSnackBar = false,

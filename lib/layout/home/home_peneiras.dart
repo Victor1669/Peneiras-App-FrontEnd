@@ -4,7 +4,7 @@ import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/widgets/peneira_card.dart';
 
 class HomePeneiras extends StatelessWidget {
-  final List<PeneiraModel> peneiras;
+  final List<PeneiraCardModel> peneiras;
   final bool isLoading;
 
   const HomePeneiras({

@@ -3,7 +3,7 @@ import 'package:peneiras/constants/app_colors.dart';
 import 'package:peneiras/models/peneira_model.dart';
 
 class PeneiraCard extends StatelessWidget {
-  final PeneiraModel peneira;
+  final PeneiraCardModel peneira;
   final VoidCallback? onTap;
 
   const PeneiraCard({

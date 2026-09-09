@@ -9,13 +9,9 @@ class PeneiraModel {
   final List<UniformType> uniforms;
   final DocumentType documents;
   final String about;
-  // Campos de outras tabelas
-  final String clubeNome;
-  final String? clubeImagem;
-  final String? endereco;
 
   const PeneiraModel({
-    required this.id,
+    this.id = "",
     required this.about,
     required this.category,
     required this.date,
@@ -23,10 +19,6 @@ class PeneiraModel {
     required this.hour,
     required this.modality,
     required this.uniforms,
-    // Campos de outras tabelas
-    required this.clubeNome,
-    required this.clubeImagem,
-    required this.endereco,
   });
 
   factory PeneiraModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +45,43 @@ class PeneiraModel {
                 orElse: () => UniformType.values.first,
               ))
           .toList(),
+    );
+  }
+}
+
+class PeneiraCardModel extends PeneiraModel {
+  // Campos de outras tabelas
+  final String clubeNome;
+  final String? clubeImagem;
+  final String? endereco;
+
+  const PeneiraCardModel({
+    required super.id,
+    required super.about,
+    required super.category,
+    required super.date,
+    required super.documents,
+    required super.hour,
+    required super.modality,
+    required super.uniforms,
+    // Campos de outras tabelas
+    required this.clubeNome,
+    required this.clubeImagem,
+    required this.endereco,
+  });
+
+  factory PeneiraCardModel.fromJson(Map<String, dynamic> json) {
+    final parent = PeneiraModel.fromJson(json);
+
+    return PeneiraCardModel(
+      id: parent.id,
+      about: parent.about,
+      category: parent.category,
+      date: parent.date,
+      documents: parent.documents,
+      hour: parent.hour,
+      modality: parent.modality,
+      uniforms: parent.uniforms,
       // Campos de outras tabelas
       clubeImagem: json['clubeImagem']?.toString() ?? '',
       clubeNome: json['clubeNome']?.toString() ?? '',

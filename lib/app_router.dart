@@ -12,8 +12,8 @@ import './screens/cadastro/cadastro_jogador.dart';
 import './screens/cadastro/cadsatro_sucesso.dart';
 
 import 'package:peneiras/screens/content/home.dart';
-import 'screens/content/profile/perfil.dart';
-import 'package:peneiras/screens/content/profile/editar_perfil.dart';
+import 'screens/content/perfil/perfil.dart';
+import 'package:peneiras/screens/content/perfil/editar_perfil.dart';
 
 import 'package:peneiras/screens/content/add_peneira.dart';
 import 'package:peneiras/screens/onboarding/fake_home.dart';

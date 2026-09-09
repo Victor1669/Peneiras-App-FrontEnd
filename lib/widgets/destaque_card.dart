@@ -5,7 +5,7 @@ import 'package:peneiras/models/peneira_model.dart';
 import '../constants/app_colors.dart';
 
 class DestaqueCard extends StatelessWidget {
-  final PeneiraModel destaque;
+  final PeneiraCardModel destaque;
   final VoidCallback? onTap;
 
   const DestaqueCard({
@@ -84,7 +84,7 @@ class _BadgeNovo extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  final PeneiraModel model;
+  final PeneiraCardModel model;
   const _Header({required this.model});
 
   @override

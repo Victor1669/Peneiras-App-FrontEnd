@@ -1,15 +1,16 @@
 import 'package:peneiras/models/requests/cadastro_requests.dart';
+import 'package:peneiras/models/requests/clube_requests.dart';
 import 'package:peneiras/services/api_service.dart';
 
 class ClubService {
   final ApiService _apiService = ApiService();
 
-  Future<CreateUsersResponse> create(CreateClubRequest body) async {
-    return _apiService.request<CreateUsersResponse>(
+  Future<UserResponse> create(CreateClubRequest body) async {
+    return _apiService.request<UserResponse>(
       path: "/api/auth/clube/register",
       data: body,
       method: "POST",
-      fromJson: (json) => CreateUsersResponse.fromJson(json),
+      fromJson: (json) => UserResponse.fromJson(json),
     );
   }
 }

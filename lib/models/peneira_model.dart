@@ -1,4 +1,4 @@
-import 'package:peneiras/models/inputs.dart';
+import 'package:peneiras/models/enums.dart';
 
 class PeneiraModel {
   final String id;

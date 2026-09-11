@@ -43,6 +43,10 @@ class CreatePlayerRequest extends PlayerModel implements Serializable {
 }
 
 class UpdatePlayerRequest extends PlayerModel implements Serializable {
+  final String cep;
+  final String numero;
+  final String complemento;
+
   const UpdatePlayerRequest({
     required super.id,
     required super.name,
@@ -52,6 +56,9 @@ class UpdatePlayerRequest extends PlayerModel implements Serializable {
     required super.dominantFoot,
     required super.category,
     required super.heightCm,
+    required this.cep,
+    required this.complemento,
+    required this.numero,
   });
 
   factory UpdatePlayerRequest.fromJson(Map<String, dynamic> json) {
@@ -65,6 +72,9 @@ class UpdatePlayerRequest extends PlayerModel implements Serializable {
       dominantFoot: model.dominantFoot,
       category: model.category,
       heightCm: model.heightCm,
+      cep: json["cep"] ?? "",
+      complemento: json["complemento"] ?? "",
+      numero: json["numero"] ?? "",
     );
   }
 
@@ -79,6 +89,9 @@ class UpdatePlayerRequest extends PlayerModel implements Serializable {
       'dominantFoot': dominantFoot,
       'category': category,
       'heightCm': heightCm,
+      "cep": cep,
+      "complemento": complemento,
+      "numero": numero
     };
   }
 }

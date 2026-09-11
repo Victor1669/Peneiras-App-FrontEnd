@@ -116,8 +116,8 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicForm(
       inputs: [
-        emailInput,
-        passwordInput,
+        getEmailInput(),
+        getPasswordInput(),
       ],
       onSubmit: (data) => _handleSubmit(context, data),
     );

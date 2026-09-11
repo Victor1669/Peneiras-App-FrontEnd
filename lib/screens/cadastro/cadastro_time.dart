@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/models/requests/clube_requests.dart';
-import 'package:peneiras/models/input_config.dart';
 import 'package:peneiras/models/inputs.dart';
 
 import 'package:peneiras/services/club_service.dart';
@@ -99,10 +98,10 @@ class _DadosPessoaisTimeStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        teamNameInput,
-        categoryInput,
-        emailInput,
-        passwordInput,
+        getTeamNameInput(),
+        getCategoryInput(),
+        getEmailInput(),
+        getPasswordInput(),
       ],
       onSubmit: onSubmit,
     );
@@ -118,27 +117,10 @@ class _ContatoTimeStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicForm(
       submitText: "Finalizar",
-      inputs: const [
-        InputConfig(
-          key: "phone",
-          label: "Telefone",
-          placeholder: "(00) 00000-0000",
-          keyboardType: TextInputType.phone,
-          icon: Icons.phone,
-        ),
-        InputConfig(
-          key: "whatsapp",
-          label: "WhatsApp",
-          placeholder: "(00) 00000-0000",
-          keyboardType: TextInputType.phone,
-          icon: Icons.chat_bubble_outline,
-        ),
-        InputConfig(
-          key: "instagramAccount",
-          label: "Instagram",
-          placeholder: "@seuclube",
-          icon: Icons.camera_alt_outlined,
-        ),
+      inputs: [
+        getPhoneInput(),
+        getWhatsappInput(),
+        getInstagramInput(),
       ],
       onSubmit: onSubmit,
     );

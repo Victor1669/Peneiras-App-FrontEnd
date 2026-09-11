@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peneiras/models/enums.dart';
 import 'package:peneiras/models/requests/peneira_requests.dart';
 
 import 'package:peneiras/models/input_config.dart';
@@ -100,7 +101,7 @@ class _DadosBasicosPeneiraStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        categoryInput,
+        getCategoryInput(),
         InputConfig(
           key: "modality",
           label: "Modalidade",
@@ -109,8 +110,8 @@ class _DadosBasicosPeneiraStep extends StatelessWidget {
           type: InputType.select,
           items: ModalityType.values.map((e) => e.toOption()).toList(),
         ),
-        dateInput,
-        hourInput,
+        getDateInput(),
+        getHourInput(),
       ],
       onSubmit: onSubmit,
     );

@@ -12,7 +12,7 @@ class ClubeModel {
     this.id = "",
     required this.name,
     required this.email,
-    required this.password,
+    this.password = "",
     required this.category,
     required this.phone,
     required this.whatsapp,

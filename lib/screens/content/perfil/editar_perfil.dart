@@ -4,36 +4,65 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/models/input_config.dart';
+import 'package:peneiras/models/requests/clube_requests.dart';
+import 'package:peneiras/models/requests/player_requests.dart';
+import 'package:peneiras/models/inputs.dart';
+
+import 'package:peneiras/services/player_service.dart';
+import 'package:peneiras/services/club_service.dart';
+
+import 'package:peneiras/layout/screen_frame.dart';
 
 import 'package:peneiras/widgets/form/dynamic_form.dart';
-import 'package:peneiras/models/inputs.dart';
 import 'package:peneiras/widgets/photo_container.dart';
 import 'package:peneiras/widgets/transparent_button.dart';
 
-final List<InputConfig> inputsJogador = [
-  playerNameInput,
-  positionInput,
-  heightInput,
-];
-final List<InputConfig> inputsClube = [
-  teamNameInput,
-  categoryInput,
-  passwordInput,
-];
+List<InputConfig> buildInputsJogador() => [
+      getPlayerNameInput(),
+      getEmailInput(),
+      getBirthDateInput(),
+      getPositionInput(),
+      getDominantFootInput(),
+      getHeightInput(),
+      getCepInput(),
+      getNumeroInput(),
+      getComplementoInput(),
+    ];
+
+List<InputConfig> buildInputsClube() => [
+      getTeamNameInput(),
+      getEmailInput(),
+      getCategoryInput(),
+      getPhoneInput(),
+      getWhatsappInput(),
+      getInstagramInput(),
+      getCepInput(),
+      getNumeroInput(),
+      getComplementoInput(),
+    ];
 
 class EditarPerfilScreen extends StatefulWidget {
-  const EditarPerfilScreen({super.key});
+  final bool isClub;
+
+  const EditarPerfilScreen({super.key, this.isClub = false});
 
   @override
   State<EditarPerfilScreen> createState() => _EditarPerfilScreenState();
 }
 
 class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
-  final String tipo = "jogador";
+  late final String tipo;
   File? _selectedImage;
   Uint8List? _webImage;
+  late final List<InputConfig> _inputs;
+
+  @override
+  void initState() {
+    super.initState();
+    tipo = widget.isClub ? "clube" : "jogador";
+    _inputs = widget.isClub ? buildInputsClube() : buildInputsJogador();
+  }
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -51,6 +80,37 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
         });
       }
     }
+  }
+
+  Future<void> _handleSubmit(Map<String, dynamic> data) async {
+    try {
+      if (tipo == "jogador") {
+        PlayerService playerService = PlayerService();
+
+        await playerService.edit(
+            dto: UpdatePlayerRequest.fromJson(data), photo: _selectedImage);
+      } else {
+        ClubService clubeService = ClubService();
+
+        await clubeService.edit(
+            dto: UpdateClubRequest.fromJson(data), photo: _selectedImage);
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Perfil de $tipo criado com sucesso!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go("/home/perfil");
+        }
+      }
+    } catch (_) {}
   }
 
   @override
@@ -92,10 +152,8 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
               ),
               DynamicForm(
                   submitText: "Continuar",
-                  inputs: tipo == "clube" ? inputsClube : inputsJogador,
-                  onSubmit: (data) async {
-                    print(data);
-                  }),
+                  inputs: _inputs,
+                  onSubmit: _handleSubmit),
               TransparentButton(
                   onPressed: () {}, child: const Text("Excluir conta")),
               const SizedBox(

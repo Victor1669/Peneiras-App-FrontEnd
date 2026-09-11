@@ -76,7 +76,7 @@ final GoRouter router = GoRouter(
               _noTransitionPage(const PerfilScreen()),
           routes: [
             GoRoute(
-              path: '/home/editar-perfil',
+              path: 'editar-perfil',
               pageBuilder: (context, state) =>
                   _noTransitionPage(const EditarPerfilScreen()),
             ),

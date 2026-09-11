@@ -19,7 +19,7 @@ class PlayerService {
         showErrorSnackBar: true);
   }
 
-  Future<void> editPlayer({
+  Future<void> edit({
     required UpdatePlayerRequest dto,
     File? photo,
   }) async {

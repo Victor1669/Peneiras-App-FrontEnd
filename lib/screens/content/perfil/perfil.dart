@@ -31,7 +31,7 @@ class PerfilScreen extends StatelessWidget {
       showBackButton: false,
       rightWidget: IconButton(
         icon: const Icon(Icons.settings, color: AppColors.lightGreen),
-        onPressed: () => {context.go("/perfil/editar-perfil")},
+        onPressed: () => {context.go("/home/perfil/editar-perfil")},
       ),
       child: SingleChildScrollView(
         child: Column(

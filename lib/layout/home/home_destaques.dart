@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:peneiras/models/inputs.dart';
 
+import 'package:peneiras/models/enums.dart';
 import 'package:peneiras/models/peneira_model.dart';
+
 import 'package:peneiras/widgets/destaque_card.dart';
 
 final List<PeneiraCardModel> mockDestaques = [

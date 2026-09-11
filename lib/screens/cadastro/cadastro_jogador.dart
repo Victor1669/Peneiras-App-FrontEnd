@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/models/requests/player_requests.dart';
-import 'package:peneiras/models/input_config.dart';
 import 'package:peneiras/models/inputs.dart';
 
 import 'package:peneiras/services/player_service.dart';
@@ -115,9 +114,9 @@ class _DadosPessoaisStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        playerNameInput,
-        emailInput,
-        passwordInput,
+        getPlayerNameInput(),
+        getEmailInput(),
+        getPasswordInput(),
       ],
       onSubmit: onSubmit,
     );
@@ -134,14 +133,9 @@ class _PosicaoStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Continuar",
       inputs: [
-        birthDateInput,
-        positionInput,
-        InputConfig(
-          key: "dominantFoot",
-          label: "Pé dominante",
-          type: InputType.select,
-          items: DominantFootType.values.map((e) => e.toOption()).toList(),
-        ),
+        getBirthDateInput(),
+        getPositionInput(),
+        getDominantFootInput(),
       ],
       onSubmit: onSubmit,
     );
@@ -158,8 +152,8 @@ class _CategoriaStep extends StatelessWidget {
     return DynamicForm(
       submitText: "Finalizar",
       inputs: [
-        categoryInput,
-        heightInput,
+        getCategoryInput(),
+        getHeightInput(),
       ],
       onSubmit: onSubmit,
     );

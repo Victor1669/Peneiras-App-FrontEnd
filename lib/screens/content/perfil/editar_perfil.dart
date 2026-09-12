@@ -45,7 +45,7 @@ List<InputConfig> buildInputsClube() => [
 class EditarPerfilScreen extends StatefulWidget {
   final bool isClub;
 
-  const EditarPerfilScreen({super.key, this.isClub = false});
+  const EditarPerfilScreen({super.key, this.isClub = true});
 
   @override
   State<EditarPerfilScreen> createState() => _EditarPerfilScreenState();
@@ -56,12 +56,49 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
   File? _selectedImage;
   Uint8List? _webImage;
   late final List<InputConfig> _inputs;
+  Map<String, dynamic>? _initialValues;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     tipo = widget.isClub ? "clube" : "jogador";
     _inputs = widget.isClub ? buildInputsClube() : buildInputsJogador();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    try {
+      final Map<String, dynamic> data;
+
+      if (widget.isClub) {
+        final clube = await ClubService().getClub();
+        data = clube.toJson();
+      } else {
+        final player = await PlayerService().getPlayer();
+        data = player.toJson();
+      }
+
+      final flatData = Map<String, dynamic>.from(data);
+      final address = flatData.remove('address') as Map<String, dynamic>?;
+
+      if (address != null) {
+        flatData['cep'] = address['cep'];
+        flatData['numero'] = address['numero'];
+        flatData['complemento'] = address['complemento'];
+      }
+
+      if (mounted) {
+        setState(() {
+          _initialValues = flatData;
+          _isLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   Future<void> _pickImage() async {
@@ -84,26 +121,29 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
 
   Future<void> _handleSubmit(Map<String, dynamic> data) async {
     try {
+      final nestedData = Map<String, dynamic>.from(data);
+
+      nestedData['address'] = {
+        'cep': nestedData.remove('cep'),
+        'numero': nestedData.remove('numero'),
+        'complemento': nestedData.remove('complemento'),
+      };
+
       if (tipo == "jogador") {
         PlayerService playerService = PlayerService();
 
         await playerService.edit(
-            dto: UpdatePlayerRequest.fromJson(data), photo: _selectedImage);
+            dto: PlayerWithAddressRequest.fromJson(nestedData),
+            photo: _selectedImage);
       } else {
         ClubService clubeService = ClubService();
 
         await clubeService.edit(
-            dto: UpdateClubRequest.fromJson(data), photo: _selectedImage);
+            dto: ClubWithAddressRequest.fromJson(nestedData),
+            photo: _selectedImage);
       }
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Perfil de $tipo criado com sucesso!"),
-            backgroundColor: Colors.green,
-          ),
-        );
-
         if (context.canPop()) {
           context.pop();
         } else {
@@ -115,6 +155,15 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return ScreenFrame(
+        onBack: () {},
+        title: "Atualizar informações",
+        headerFontSize: 20,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return ScreenFrame(
         title: "Atualizar informações",
         headerFontSize: 20,
@@ -153,6 +202,7 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
               DynamicForm(
                   submitText: "Continuar",
                   inputs: _inputs,
+                  initialValues: _initialValues,
                   onSubmit: _handleSubmit),
               TransparentButton(
                   onPressed: () {}, child: const Text("Excluir conta")),

@@ -60,17 +60,9 @@ class _AddPeneiraScreenState extends State<AddPeneiraScreen> {
 
             await peneiraService.create(dataParaEnvio);
 
-            if (!mounted) return;
-
-            // Sucesso
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Peneira publicada com sucesso!"),
-                backgroundColor: Colors.green,
-              ),
-            );
-
-            context.go("/home");
+            if (mounted) {
+              context.go("/home");
+            }
           } catch (_) {}
         });
     }

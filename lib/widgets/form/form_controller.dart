@@ -6,16 +6,21 @@ class FormController {
   final Map<String, String?> singleSelectedValues = {};
   final Map<String, List<String>> multipleSelectedValues = {};
 
-  void init(List<InputConfig> inputs) {
+  void init(List<InputConfig> inputs, {Map<String, dynamic>? initialValues}) {
     for (var input in inputs) {
+      final initialValue = initialValues?[input.key];
+
       if (input.type == InputType.select) {
         if (input.isMultiple) {
-          multipleSelectedValues[input.key] = [];
+          multipleSelectedValues[input.key] =
+              initialValue is List ? List<String>.from(initialValue) : [];
         } else {
-          singleSelectedValues[input.key] = null;
+          singleSelectedValues[input.key] = initialValue?.toString();
         }
       } else {
-        textControllers[input.key] = TextEditingController();
+        textControllers[input.key] = TextEditingController(
+          text: initialValue?.toString() ?? '',
+        );
       }
     }
   }

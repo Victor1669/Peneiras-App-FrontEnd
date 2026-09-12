@@ -74,15 +74,6 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
 
             await playerService.create(playerBody);
 
-            if (!mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Jogador criado com sucesso!"),
-                backgroundColor: Colors.green,
-              ),
-            );
-
             if (mounted) {
               context.replace("/login");
             }

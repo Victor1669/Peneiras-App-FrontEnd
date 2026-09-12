@@ -1,3 +1,4 @@
+import 'package:peneiras/models/address_model.dart';
 import 'package:peneiras/models/player_model.dart';
 import 'package:peneiras/models/requests/serializable.dart';
 
@@ -42,12 +43,10 @@ class CreatePlayerRequest extends PlayerModel implements Serializable {
   }
 }
 
-class UpdatePlayerRequest extends PlayerModel implements Serializable {
-  final String cep;
-  final String numero;
-  final String complemento;
+class PlayerWithAddressRequest extends PlayerModel implements Serializable {
+  final AddressModel? address;
 
-  const UpdatePlayerRequest({
+  const PlayerWithAddressRequest({
     required super.id,
     required super.name,
     required super.email,
@@ -56,14 +55,12 @@ class UpdatePlayerRequest extends PlayerModel implements Serializable {
     required super.dominantFoot,
     required super.category,
     required super.heightCm,
-    required this.cep,
-    required this.complemento,
-    required this.numero,
+    this.address,
   });
 
-  factory UpdatePlayerRequest.fromJson(Map<String, dynamic> json) {
+  factory PlayerWithAddressRequest.fromJson(Map<String, dynamic> json) {
     final model = PlayerModel.fromJson(json);
-    return UpdatePlayerRequest(
+    return PlayerWithAddressRequest(
       id: model.id,
       name: model.name,
       email: model.email,
@@ -72,9 +69,9 @@ class UpdatePlayerRequest extends PlayerModel implements Serializable {
       dominantFoot: model.dominantFoot,
       category: model.category,
       heightCm: model.heightCm,
-      cep: json["cep"] ?? "",
-      complemento: json["complemento"] ?? "",
-      numero: json["numero"] ?? "",
+      address: json["address"] != null
+          ? AddressModel.fromJson(json["address"])
+          : null,
     );
   }
 
@@ -89,9 +86,7 @@ class UpdatePlayerRequest extends PlayerModel implements Serializable {
       'dominantFoot': dominantFoot,
       'category': category,
       'heightCm': heightCm,
-      "cep": cep,
-      "complemento": complemento,
-      "numero": numero
+      'address': address?.toJson(),
     };
   }
 }

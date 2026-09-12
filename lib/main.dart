@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:peneiras/app_router.dart';
 
 import 'package:peneiras/utils/preferences_helper.dart';
-import 'package:peneiras/utils/snackbar_helper.dart';
+import 'package:peneiras/utils/global_keys.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 

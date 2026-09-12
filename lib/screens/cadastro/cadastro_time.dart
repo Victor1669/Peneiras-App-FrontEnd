@@ -59,17 +59,9 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
 
             await clubService.create(clubBody);
 
-            if (!mounted) return;
-
-            // Sucesso
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Clube criado com sucesso!"),
-                backgroundColor: Colors.green,
-              ),
-            );
-
-            context.replace('/login');
+            if (mounted) {
+              context.replace('/login');
+            }
           } catch (_) {}
         });
     }

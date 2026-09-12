@@ -10,9 +10,16 @@ import 'package:peneiras/models/requests/player_requests.dart';
 class PlayerService {
   final ApiService apiService = ApiService();
 
+  Future<PlayerWithAddressRequest> getPlayer() async {
+    return await apiService.request<PlayerWithAddressRequest>(
+        path: "/players/me",
+        method: "GET",
+        fromJson: (json) => PlayerWithAddressRequest.fromJson(json));
+  }
+
   Future<UserResponse> create(CreatePlayerRequest body) {
     return apiService.request<UserResponse>(
-        path: "/auth/register",
+        path: "/players/register",
         method: "POST",
         data: body,
         fromJson: (json) => UserResponse.fromJson(json),
@@ -20,7 +27,7 @@ class PlayerService {
   }
 
   Future<void> edit({
-    required UpdatePlayerRequest dto,
+    required PlayerWithAddressRequest dto,
     File? photo,
   }) async {
     final files = <String, MultipartFile>{

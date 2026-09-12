@@ -1,3 +1,4 @@
+import 'package:peneiras/models/address_model.dart';
 import 'package:peneiras/models/clube_model.dart';
 import 'package:peneiras/models/requests/serializable.dart';
 
@@ -38,34 +39,31 @@ class CreateClubRequest extends ClubeModel implements Serializable {
   }
 }
 
-class UpdateClubRequest extends ClubeModel implements Serializable {
-  final String cep;
-  final String numero;
-  final String complemento;
+class ClubWithAddressRequest extends ClubeModel implements Serializable {
+  final AddressModel? address;
 
-  UpdateClubRequest(
-      {required super.name,
-      required super.email,
-      required super.category,
-      required super.instagramAccount,
-      required super.phone,
-      required super.whatsapp,
-      required this.cep,
-      required this.complemento,
-      required this.numero});
+  ClubWithAddressRequest({
+    required super.name,
+    required super.email,
+    required super.category,
+    required super.instagramAccount,
+    required super.phone,
+    required super.whatsapp,
+    this.address,
+  });
 
-  factory UpdateClubRequest.fromJson(Map<String, dynamic> json) {
+  factory ClubWithAddressRequest.fromJson(Map<String, dynamic> json) {
     final parent = ClubeModel.fromJson(json);
-    return UpdateClubRequest(
+    return ClubWithAddressRequest(
       name: parent.name,
       email: parent.email,
       category: parent.category,
       instagramAccount: parent.instagramAccount,
       phone: parent.phone,
       whatsapp: parent.whatsapp,
-      cep: json["cep"] ?? "",
-      complemento: json["complemento"] ?? "",
-      numero: json["numero"] ?? "",
+      address: json["address"] != null
+          ? AddressModel.fromJson(json["address"])
+          : null,
     );
   }
 
@@ -78,9 +76,7 @@ class UpdateClubRequest extends ClubeModel implements Serializable {
       'phone': phone,
       'whatsapp': whatsapp,
       'instagramAccount': instagramAccount,
-      "cep": cep,
-      "complemento": complemento,
-      "numero": numero
+      'address': address?.toJson(),
     };
   }
 }

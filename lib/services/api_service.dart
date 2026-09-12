@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:peneiras/utils/snackbar_helper.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:peneiras/utils/global_keys.dart';
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
 
@@ -20,18 +22,37 @@ class ApiService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          try {
-            final prefs = await SharedPreferences.getInstance();
-            final String? token = prefs.getString('auth_token');
+          final prefs = await SharedPreferences.getInstance();
+          final String? token = prefs.getString('auth_token');
 
-            if (token != null && token.isNotEmpty) {
-              options.headers['Authorization'] = 'Bearer $token';
-            }
-          } catch (e) {
-            print('Erro ao recuperar token de autenticação: $e');
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
           }
 
           return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          try {
+            final data = response.data;
+            String? message;
+
+            if (data is Map && data.containsKey('message')) {
+              message = data['message']?.toString();
+            } else if (data is String && data.trim().isNotEmpty) {
+              message = data;
+            }
+
+            if (message != null && message.isNotEmpty) {
+              rootScaffoldMessengerKey.currentState?.showSnackBar(
+                SnackBar(
+                  content: Text(message),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          } catch (_) {}
+
+          return handler.next(response);
         },
       ),
     );
@@ -132,4 +153,14 @@ class ApiService {
       throw Exception(errorMessage);
     }
   }
+}
+
+void showAppSnackBar(String message, {bool isError = true}) {
+  rootScaffoldMessengerKey.currentState?.showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: isError ? Colors.redAccent : Colors.green,
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
 }

@@ -9,9 +9,16 @@ import 'package:peneiras/services/api_service.dart';
 class ClubService {
   final ApiService apiService = ApiService();
 
+  Future<ClubWithAddressRequest> getClub() async {
+    return await apiService.request<ClubWithAddressRequest>(
+        path: "/clubes/me",
+        method: "GET",
+        fromJson: (json) => ClubWithAddressRequest.fromJson(json));
+  }
+
   Future<UserResponse> create(CreateClubRequest body) async {
     return apiService.request<UserResponse>(
-      path: "/api/auth/clube/register",
+      path: "/clubes/register",
       data: body,
       method: "POST",
       fromJson: (json) => UserResponse.fromJson(json),
@@ -19,7 +26,7 @@ class ClubService {
   }
 
   Future<void> edit({
-    required UpdateClubRequest dto,
+    required ClubWithAddressRequest dto,
     File? photo,
   }) async {
     final files = <String, MultipartFile>{

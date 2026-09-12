@@ -11,12 +11,14 @@ class DynamicForm extends StatefulWidget {
   final List<InputConfig> inputs;
   final String submitText;
   final Function(Map<String, dynamic>) onSubmit;
+  final Map<String, dynamic>? initialValues;
 
   const DynamicForm({
     super.key,
     required this.inputs,
     required this.onSubmit,
     this.submitText = "Enviar",
+    this.initialValues,
   });
 
   @override
@@ -31,7 +33,7 @@ class _DynamicFormState extends State<DynamicForm> {
   void initState() {
     super.initState();
     _formController = FormController();
-    _formController.init(widget.inputs);
+    _formController.init(widget.inputs, initialValues: widget.initialValues);
   }
 
   @override

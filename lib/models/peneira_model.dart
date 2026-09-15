@@ -26,26 +26,39 @@ class PeneiraModel {
       id: json['id']?.toString() ?? '',
       about: json['about']?.toString() ?? '',
       category: CategoryType.values.firstWhere(
-        (e) => e.name == json['category'],
+        (e) => e.value == json['category'],
         orElse: () => CategoryType.values.first,
       ),
       date: json['date']?.toString() ?? '',
       documents: DocumentType.values.firstWhere(
-        (e) => e.name == json['documents'],
+        (e) => e.value == json['documents'],
         orElse: () => DocumentType.values.first,
       ),
       hour: json['hour']?.toString() ?? '',
       modality: ModalityType.values.firstWhere(
-        (e) => e.name == json['modality'],
+        (e) => e.value == json['modality'],
         orElse: () => ModalityType.values.first,
       ),
       uniforms: (json['uniforms'] as List<dynamic>? ?? [])
           .map((item) => UniformType.values.firstWhere(
-                (e) => e.name == item,
+                (e) => e.value == item,
                 orElse: () => UniformType.values.first,
               ))
           .toList(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'about': about,
+      'category': category.value,
+      'date': date,
+      'documents': documents.value,
+      'hour': hour,
+      'modality': modality.value,
+      'uniforms': uniforms.map((u) => u.value).toList(),
+    };
   }
 }
 

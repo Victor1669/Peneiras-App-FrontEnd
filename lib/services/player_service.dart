@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 
 import 'package:peneiras/services/api_service.dart';
 
-import 'package:peneiras/models/requests/cadastro_requests.dart';
 import 'package:peneiras/models/requests/player_requests.dart';
 
 class PlayerService {
@@ -17,12 +16,12 @@ class PlayerService {
         fromJson: (json) => PlayerWithAddressRequest.fromJson(json));
   }
 
-  Future<UserResponse> create(CreatePlayerRequest body) {
-    return apiService.request<UserResponse>(
+  Future<void> create(CreatePlayerRequest body) {
+    return apiService.request(
         path: "/players/register",
         method: "POST",
         data: body,
-        fromJson: (json) => UserResponse.fromJson(json),
+        fromJson: (json) => {},
         showErrorSnackBar: true);
   }
 
@@ -44,11 +43,11 @@ class PlayerService {
       );
     }
 
-    await apiService.requestMultipart<UserResponse>(
+    await apiService.requestMultipart(
       path: '/players/me',
       method: 'PUT',
       files: files,
-      fromJson: (json) => UserResponse.fromJson(json),
+      fromJson: (json) => {},
       showErrorSnackBar: true,
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/models/enums.dart';
@@ -36,13 +37,11 @@ final List<PeneiraCardModel> mockDestaques = [
 class HomeDestaques extends StatefulWidget {
   final List<PeneiraCardModel>? destaques;
   final bool isLoading;
-  final void Function(PeneiraCardModel model)? onTapDestaque;
 
   const HomeDestaques({
     super.key,
     this.destaques,
     this.isLoading = false,
-    this.onTapDestaque,
   });
 
   @override
@@ -78,12 +77,13 @@ class _HomeDestaquesState extends State<HomeDestaques> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: destaques.length,
                 itemBuilder: (context, index) {
-                  final model = destaques[index];
+                  final peneira = destaques[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: DestaqueCard(
-                      onTap: () => widget.onTapDestaque?.call(model),
-                      destaque: model,
+                      onTap: () =>
+                          context.go('/home/edit-peneira/${peneira.id}'),
+                      destaque: peneira,
                     ),
                   );
                 },

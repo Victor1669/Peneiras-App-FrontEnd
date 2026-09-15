@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 
-import 'package:peneiras/models/requests/cadastro_requests.dart';
 import 'package:peneiras/models/requests/clube_requests.dart';
 import 'package:peneiras/services/api_service.dart';
 
@@ -16,12 +15,12 @@ class ClubService {
         fromJson: (json) => ClubWithAddressRequest.fromJson(json));
   }
 
-  Future<UserResponse> create(CreateClubRequest body) async {
-    return apiService.request<UserResponse>(
+  Future<void> create(CreateClubRequest body) async {
+    return apiService.request(
       path: "/clubes/register",
       data: body,
       method: "POST",
-      fromJson: (json) => UserResponse.fromJson(json),
+      fromJson: (json) => {},
     );
   }
 
@@ -43,11 +42,11 @@ class ClubService {
       );
     }
 
-    await apiService.requestMultipart<UserResponse>(
+    await apiService.requestMultipart(
       path: '/clubes/me',
       method: 'PUT',
       files: files,
-      fromJson: (json) => UserResponse.fromJson(json),
+      fromJson: (json) => {},
       showErrorSnackBar: true,
     );
   }

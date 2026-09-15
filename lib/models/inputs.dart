@@ -145,3 +145,38 @@ InputConfig getDominantFootInput() => InputConfig(
       type: InputType.select,
       items: DominantFootType.values.map((e) => e.toOption()).toList(),
     );
+
+InputConfig getUniformInput() => InputConfig(
+      key: "uniforms",
+      label: "Uniforme",
+      placeholder: "Selecione o uniforme",
+      icon: Icons.checkroom_outlined,
+      type: InputType.select,
+      isMultiple: true,
+      items: UniformType.values.map((e) => e.toOption()).toList(),
+    );
+
+InputConfig getModalityInput() => InputConfig(
+      key: "modality",
+      label: "Modalidade",
+      placeholder: "Selecione a modalidade",
+      icon: Icons.sports_soccer_outlined,
+      type: InputType.select,
+      items: ModalityType.values.map((e) => e.toOption()).toList(),
+    );
+
+InputConfig getDocumentInput() => InputConfig(
+      key: "documents",
+      label: "Documentos",
+      placeholder: "Selecione os documentos",
+      icon: Icons.description_outlined,
+      type: InputType.select,
+      items: DocumentType.values.map((e) => e.toOption()).toList(),
+    );
+
+InputConfig getAboutInput() => InputConfig(
+      key: "about",
+      label: "Sobre",
+      placeholder: "Descreva a peneira (informações adicionais)",
+      icon: Icons.info_outline,
+    );

@@ -5,12 +5,21 @@ import 'package:peneiras/services/api_service.dart';
 class PeneiraService {
   final ApiService _apiService = ApiService();
 
-  Future<void> create(CreatePeneiraRequest body) async {
+  Future<void> create(PeneiraRequest body) async {
     return _apiService.request(
       path: "/peneiras",
       data: body,
       method: "POST",
       fromJson: (json) {},
+    );
+  }
+
+  Future<void> update(PeneiraRequest body, String peneiraId) async {
+    return _apiService.request(
+      path: "/peneiras/$peneiraId",
+      data: body,
+      method: "PUT",
+      fromJson: (json) => PeneiraRequest.fromJson(json),
     );
   }
 
@@ -23,5 +32,12 @@ class PeneiraService {
         return list.map((item) => PeneiraCardModel.fromJson(item)).toList();
       },
     );
+  }
+
+  Future<PeneiraModel> getById(String peneiraId) async {
+    return _apiService.request<PeneiraModel>(
+        path: "/peneiras/$peneiraId",
+        method: "GET",
+        fromJson: (json) => PeneiraModel.fromJson(json));
   }
 }

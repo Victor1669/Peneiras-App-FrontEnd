@@ -45,7 +45,10 @@ class HomePeneiras extends StatelessWidget {
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 15),
-              child: PeneiraCard(peneira: peneiras[index]),
+              child: PeneiraCard(
+                peneira: peneiras[index],
+                onTap: () {},
+              ),
             );
           },
         ),

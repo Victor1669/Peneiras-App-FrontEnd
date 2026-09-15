@@ -1,8 +1,8 @@
 import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/models/requests/serializable.dart';
 
-class CreatePeneiraRequest extends PeneiraModel implements Serializable {
-  const CreatePeneiraRequest({
+class PeneiraRequest extends PeneiraModel implements Serializable {
+  const PeneiraRequest({
     required super.about,
     required super.category,
     required super.date,
@@ -12,9 +12,9 @@ class CreatePeneiraRequest extends PeneiraModel implements Serializable {
     required super.uniforms,
   });
 
-  factory CreatePeneiraRequest.fromJson(Map<String, dynamic> json) {
+  factory PeneiraRequest.fromJson(Map<String, dynamic> json) {
     final model = PeneiraCardModel.fromJson(json);
-    return CreatePeneiraRequest(
+    return PeneiraRequest(
       about: model.about,
       category: model.category,
       date: model.date,

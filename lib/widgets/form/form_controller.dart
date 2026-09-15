@@ -12,8 +12,9 @@ class FormController {
 
       if (input.type == InputType.select) {
         if (input.isMultiple) {
-          multipleSelectedValues[input.key] =
-              initialValue is List ? List<String>.from(initialValue) : [];
+          multipleSelectedValues[input.key] = initialValue is List
+              ? initialValue.map((e) => e.toString()).toList()
+              : [];
         } else {
           singleSelectedValues[input.key] = initialValue?.toString();
         }

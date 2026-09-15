@@ -51,6 +51,7 @@ class DestaqueCard extends StatelessWidget {
                     : destaque.endereco!,
               ),
               _InfoRow(icon: Icons.calendar_today, text: destaque.date),
+              _InfoRow(icon: Icons.info, text: destaque.about),
               _BotaoVerDetalhes(onPressed: onTap),
             ],
           ),

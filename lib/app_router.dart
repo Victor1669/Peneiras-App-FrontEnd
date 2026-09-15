@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/main_shell.dart';
+import 'package:peneiras/screens/content/peneiras/edit_peneira.dart';
 
 import "./screens/initial.dart";
 import "./screens/login.dart";
@@ -15,7 +16,7 @@ import 'package:peneiras/screens/content/home.dart';
 import 'screens/content/perfil/perfil.dart';
 import 'package:peneiras/screens/content/perfil/editar_perfil.dart';
 
-import 'package:peneiras/screens/content/add_peneira.dart';
+import 'package:peneiras/screens/content/peneiras/add_peneira.dart';
 import 'package:peneiras/screens/onboarding/fake_home.dart';
 import 'package:peneiras/screens/onboarding/fake_perfil.dart';
 
@@ -69,6 +70,13 @@ final GoRouter router = GoRouter(
           path: '/home/add-peneira',
           pageBuilder: (context, state) =>
               _noTransitionPage(const AddPeneiraScreen()),
+        ),
+        GoRoute(
+          path: '/home/edit-peneira/:id',
+          builder: (context, state) {
+            final peneiraId = state.pathParameters['id']!;
+            return EditPeneiraScreen(peneiraId: peneiraId);
+          },
         ),
         GoRoute(
           path: '/home/perfil',

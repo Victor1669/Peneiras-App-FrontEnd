@@ -70,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return ScreenFrame(
       title: "",
-      onBack: () {},
       showBackButton: false,
       rightWidget: IconButton(
         icon: const Icon(Icons.notifications),

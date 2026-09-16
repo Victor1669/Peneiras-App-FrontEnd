@@ -3,16 +3,16 @@ import 'package:peneiras/models/player_model.dart';
 import 'package:peneiras/models/requests/serializable.dart';
 
 class CreatePlayerRequest extends PlayerModel implements Serializable {
-  const CreatePlayerRequest({
-    required super.name,
-    required super.email,
-    required super.password,
-    required super.birthDate,
-    required super.position,
-    required super.dominantFoot,
-    required super.category,
-    required super.heightCm,
-  });
+  const CreatePlayerRequest(
+      {required super.name,
+      required super.email,
+      required super.password,
+      required super.birthDate,
+      required super.position,
+      required super.dominantFoot,
+      required super.category,
+      required super.heightCm,
+      super.userImg = ''});
 
   factory CreatePlayerRequest.fromJson(Map<String, dynamic> json) {
     final model = PlayerModel.fromJson(json);
@@ -55,20 +55,22 @@ class PlayerWithAddressRequest extends PlayerModel implements Serializable {
     required super.dominantFoot,
     required super.category,
     required super.heightCm,
+    required super.userImg,
     this.address,
   });
 
   factory PlayerWithAddressRequest.fromJson(Map<String, dynamic> json) {
-    final model = PlayerModel.fromJson(json);
+    final parent = PlayerModel.fromJson(json);
     return PlayerWithAddressRequest(
-      id: model.id,
-      name: model.name,
-      email: model.email,
-      birthDate: model.birthDate,
-      position: model.position,
-      dominantFoot: model.dominantFoot,
-      category: model.category,
-      heightCm: model.heightCm,
+      id: parent.id,
+      name: parent.name,
+      email: parent.email,
+      birthDate: parent.birthDate,
+      position: parent.position,
+      dominantFoot: parent.dominantFoot,
+      category: parent.category,
+      heightCm: parent.heightCm,
+      userImg: parent.userImg,
       address: json["address"] != null
           ? AddressModel.fromJson(json["address"])
           : null,
@@ -84,6 +86,7 @@ class PlayerWithAddressRequest extends PlayerModel implements Serializable {
       'birthDate': birthDate,
       'position': position,
       'dominantFoot': dominantFoot,
+      'userImg': userImg,
       'category': category,
       'heightCm': heightCm,
       'address': address?.toJson(),

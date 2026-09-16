@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HeaderStack extends StatelessWidget {
   final String title;
-  final VoidCallback onBack;
+  final VoidCallback? onBack;
   final double? fontSize;
   final bool showBackButton;
   final Widget? rightWidget;
 
   const HeaderStack({
     super.key,
-    required this.onBack,
+    this.onBack,
     required this.title,
     this.fontSize = 32,
     this.showBackButton = true,
@@ -24,7 +25,16 @@ class HeaderStack extends StatelessWidget {
         if (showBackButton)
           Align(
             alignment: Alignment.centerLeft,
-            child: BackButton(onPressed: onBack),
+            child: BackButton(
+              onPressed: onBack ??
+                  () {
+                    if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go("/login");
+                    }
+                  },
+            ),
           ),
         Text(
           title,

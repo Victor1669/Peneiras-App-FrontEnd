@@ -4,7 +4,7 @@ import 'package:peneiras/widgets/header_stack.dart';
 class ScreenFrame extends StatelessWidget {
   final String title;
   final double? headerFontSize;
-  final VoidCallback onBack;
+  final VoidCallback? onBack;
   final Widget child;
   final Widget? footer;
   final bool showBackButton;
@@ -13,7 +13,7 @@ class ScreenFrame extends StatelessWidget {
   const ScreenFrame({
     super.key,
     required this.title,
-    required this.onBack,
+    this.onBack,
     required this.child,
     this.headerFontSize = 32,
     this.footer,

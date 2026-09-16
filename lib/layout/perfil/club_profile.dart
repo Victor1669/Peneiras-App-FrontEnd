@@ -1,87 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 import 'package:peneiras/utils/global_keys.dart';
+import 'package:peneiras/providers/club_controller.dart';
 
 import 'package:peneiras/widgets/perfil/perfil_infos.dart';
 import 'package:peneiras/widgets/perfil/perfil_ui.dart';
 
-class ClubProfile extends StatefulWidget {
+class ClubProfile extends ConsumerWidget {
   final bool isFake;
 
   const ClubProfile({super.key, this.isFake = false});
 
   @override
-  State<ClubProfile> createState() => _ClubProfileState();
-}
-
-class _ClubProfileState extends State<ClubProfile> {
-  late bool isLoading;
-
-  late String image;
-  late String name;
-  late String subtitle;
-  late String location;
-  late String aboutText;
-  late List<String> categories;
-  late String email;
-  late String phone;
-  late String socialMedia;
-
-  @override
-  void initState() {
-    super.initState();
-
-    isLoading = !widget.isFake;
-
-    if (widget.isFake) {
-      _loadMockData();
-    } else {
-      image = "";
-      name = "";
-      subtitle = "";
-      location = "";
-      aboutText = "";
-      categories = [];
-      email = "";
-      phone = "";
-      socialMedia = "";
-      _fetchClubData();
-    }
-  }
-
-  void _loadMockData() {
-    image = "assets/logo.png";
-    name = "Peneiras f.c";
-    subtitle = "Clube de futebol";
-    location = "São Paulo - SP";
-    aboutText = "Formando talentos desde 1999";
-    categories = ["Sub-15", "Sub-17", "Profissional"];
-    email = "contato@peneirasfc.com";
-    phone = "(11) 99999-9999";
-    socialMedia = "@peneirasfc";
-  }
-
-  Future<void> _fetchClubData() async {
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    if (!mounted) return;
-
-    setState(() {
-      _loadMockData();
-      isLoading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.lightGreen),
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (isFake) {
+      return _buildProfileContent(
+        context,
+        image: "assets/logo.png",
+        name: "Peneiras f.c",
+        category: "FUTEBOL",
+        location: "CEP: 06815-630, Nº 11",
+        email: "contato@peneirasfc.com",
+        phone: "(11) 99999-9999",
+        whatsapp: "(11) 99999-9999",
+        socialMedia: "@peneirasfc",
       );
     }
 
+    final clubAsync = ref.watch(clubControllerProvider);
+
+    return clubAsync.when(
+      data: (club) {
+        final address = club.address;
+        final locationStr = address != null
+            ? "CEP: ${address.cep}, Nº ${address.numero}"
+            : "Não informada";
+
+        return _buildProfileContent(
+          context,
+          image: club.userImg ?? "assets/logo.png",
+          name: club.name ?? "Nome não informado",
+          category: club.category ?? "Não informada",
+          location: locationStr,
+          email: club.email ?? "Não informado",
+          phone: club.phone ?? "Não informado",
+          whatsapp: club.whatsapp ?? "Não informado",
+          socialMedia: club.instagramAccount ?? "Não informado",
+        );
+      },
+      loading: () => const Center(
+        child: CircularProgressIndicator(color: AppColors.lightGreen),
+      ),
+      error: (err, stack) => const Center(
+        child: Text(
+          "Erro ao carregar perfil do clube",
+          style: TextStyle(color: Colors.white70),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileContent(
+    BuildContext context, {
+    required String image,
+    required String name,
+    required String category,
+    required String location,
+    required String email,
+    required String phone,
+    required String whatsapp,
+    required String socialMedia,
+  }) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -93,7 +85,9 @@ class _ClubProfileState extends State<ClubProfile> {
               border: Border.all(color: AppColors.lightGreen, width: 2),
             ),
             child: ClipOval(
-              child: Image.asset(image, fit: BoxFit.cover),
+              child: image.startsWith('http')
+                  ? Image.network(image, fit: BoxFit.cover)
+                  : Image.asset(image, fit: BoxFit.cover),
             ),
           ),
           const SizedBox(height: 12),
@@ -107,7 +101,7 @@ class _ClubProfileState extends State<ClubProfile> {
           ),
           const SizedBox(height: 4),
           Text(
-            subtitle,
+            category,
             style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
           const SizedBox(height: 4),
@@ -143,12 +137,6 @@ class _ClubProfileState extends State<ClubProfile> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  aboutText,
-                  style: const TextStyle(
-                      color: Colors.white70, fontSize: 14, height: 1.4),
-                ),
               ],
             ),
           ),
@@ -170,8 +158,9 @@ class _ClubProfileState extends State<ClubProfile> {
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children:
-                      categories.map((cat) => PerfilChip(label: cat)).toList(),
+                  children: [
+                    PerfilChip(label: category),
+                  ],
                 ),
               ],
             ),
@@ -192,6 +181,7 @@ class _ClubProfileState extends State<ClubProfile> {
                 const SizedBox(height: 8),
                 PerfilContato(icon: Icons.email, text: email),
                 PerfilContato(icon: Icons.phone, text: phone),
+                PerfilContato(icon: Icons.phone_android, text: whatsapp),
                 PerfilContato(icon: Icons.camera_alt, text: socialMedia),
               ],
             ),

@@ -8,18 +8,19 @@ class PlayerModel {
   final String dominantFoot;
   final String category;
   final int heightCm;
+  final String userImg;
 
-  const PlayerModel({
-    this.id = "",
-    required this.name,
-    required this.email,
-    this.password = '',
-    required this.birthDate,
-    required this.position,
-    required this.dominantFoot,
-    required this.category,
-    required this.heightCm,
-  });
+  const PlayerModel(
+      {this.id = "",
+      required this.name,
+      required this.email,
+      this.password = '',
+      required this.birthDate,
+      required this.position,
+      required this.dominantFoot,
+      required this.category,
+      required this.heightCm,
+      this.userImg = ''});
 
   factory PlayerModel.fromJson(Map<String, dynamic> json) {
     return PlayerModel(
@@ -31,6 +32,7 @@ class PlayerModel {
       position: json['position'] ?? '',
       dominantFoot: json['dominantFoot'] ?? '',
       category: json['category'] ?? '',
+      userImg: json['userImg'] ?? '',
       heightCm: int.tryParse(json['heightCm']?.toString() ?? '0') ?? 0,
     );
   }

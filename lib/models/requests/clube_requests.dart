@@ -49,6 +49,7 @@ class ClubWithAddressRequest extends ClubeModel implements Serializable {
     required super.instagramAccount,
     required super.phone,
     required super.whatsapp,
+    required super.userImg,
     this.address,
   });
 
@@ -61,6 +62,7 @@ class ClubWithAddressRequest extends ClubeModel implements Serializable {
       instagramAccount: parent.instagramAccount,
       phone: parent.phone,
       whatsapp: parent.whatsapp,
+      userImg: parent.userImg,
       address: json["address"] != null
           ? AddressModel.fromJson(json["address"])
           : null,
@@ -76,6 +78,7 @@ class ClubWithAddressRequest extends ClubeModel implements Serializable {
       'phone': phone,
       'whatsapp': whatsapp,
       'instagramAccount': instagramAccount,
+      'userImg': userImg,
       'address': address?.toJson(),
     };
   }

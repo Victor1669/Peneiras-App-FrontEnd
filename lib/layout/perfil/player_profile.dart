@@ -1,79 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
+import 'package:peneiras/providers/player_controller.dart';
 import 'package:peneiras/utils/global_keys.dart';
 
 import 'package:peneiras/widgets/perfil/perfil_infos.dart';
 import 'package:peneiras/widgets/perfil/perfil_ui.dart';
 
-class PlayerProfile extends StatefulWidget {
+class PlayerProfile extends ConsumerWidget {
   final bool isFake;
 
-  const PlayerProfile({super.key, this.isFake = true});
+  const PlayerProfile({super.key, this.isFake = false});
 
   @override
-  State<PlayerProfile> createState() => _PlayerProfileState();
-}
-
-class _PlayerProfileState extends State<PlayerProfile> {
-  late bool isLoading;
-
-  late String image;
-  late String name;
-  late String position;
-  late String birthDate;
-  late String number;
-  late String aboutText;
-
-  @override
-  void initState() {
-    super.initState();
-
-    isLoading = !widget.isFake;
-
-    if (widget.isFake) {
-      _loadMockData();
-    } else {
-      image = "";
-      name = "";
-      position = "";
-      birthDate = "";
-      number = "";
-      aboutText = "";
-      _fetchPlayerData();
-    }
-  }
-
-  void _loadMockData() {
-    image = "assets/logo.png";
-    name = "User";
-    position = "Meia Atacante";
-    birthDate = "24/03/2009";
-    number = "10";
-    aboutText =
-        "Jogador dedicado, com boa visão de jogo, passe preciso e chegada forte ao ataque. Buscando sempre evoluir e ajudar a equipe dentro e fora de campo.";
-  }
-
-  Future<void> _fetchPlayerData() async {
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    if (!mounted) return;
-
-    setState(() {
-      _loadMockData();
-      isLoading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.lightGreen),
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (isFake) {
+      return _buildProfileContent(
+        context,
+        image: "assets/logo.png",
+        name: "User",
+        position: "Meia Atacante",
+        birthDate: "24/03/2009",
+        dominantFoot: "Direito",
+        aboutText:
+            "Jogador dedicado, com boa visão de jogo, passe preciso e chegada forte ao ataque. Buscando sempre evoluir e ajudar a equipe dentro e fora de campo.",
+        height: "180",
       );
     }
 
+    final playerAsync = ref.watch(playerControllerProvider);
+
+    return playerAsync.when(
+      data: (player) {
+        return _buildProfileContent(
+          context,
+          image: player.userImg ?? "assets/logo.png",
+          name: player.name,
+          position: player.position ?? "Não informada",
+          birthDate: player.birthDate ?? "Não informada",
+          dominantFoot: player.dominantFoot ?? "Não informado",
+          aboutText: /*player.about ??*/ "Nenhuma descrição informada.",
+          height: player.heightCm?.toString() ?? "0",
+        );
+      },
+      loading: () => const Center(
+        child: CircularProgressIndicator(color: AppColors.lightGreen),
+      ),
+      error: (err, stack) => Center(
+        child: Text(
+          "Erro ao carregar perfil",
+          style: const TextStyle(color: Colors.white70),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileContent(
+    BuildContext context, {
+    required String image,
+    required String name,
+    required String position,
+    required String birthDate,
+    required String dominantFoot,
+    required String aboutText,
+    required String height,
+  }) {
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -85,7 +78,9 @@ class _PlayerProfileState extends State<PlayerProfile> {
             border: Border.all(color: AppColors.lightGreen, width: 2),
           ),
           child: ClipOval(
-            child: Image.asset(image, fit: BoxFit.cover),
+            child: image.startsWith('http')
+                ? Image.network(image, fit: BoxFit.cover)
+                : Image.asset(image, fit: BoxFit.cover),
           ),
         ),
         const SizedBox(height: 12),
@@ -101,7 +96,8 @@ class _PlayerProfileState extends State<PlayerProfile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.person, size: 15, color: AppColors.lightGreen),
+            const Icon(Icons.sports_soccer,
+                size: 15, color: AppColors.lightGreen),
             const SizedBox(width: 4),
             Text(position,
                 style: const TextStyle(color: Colors.white70, fontSize: 13)),
@@ -128,14 +124,17 @@ class _PlayerProfileState extends State<PlayerProfile> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               PerfilInfo(
-                  icon: Icons.sports_soccer, title: "Posição", value: position),
+                  icon: Icons.height, title: "Altura", value: "$height cm"),
               const PerfilDivider(height: 36),
               PerfilInfo(
                   icon: Icons.calendar_month,
                   title: "Nascimento",
                   value: birthDate),
               const PerfilDivider(height: 36),
-              PerfilInfo(icon: Icons.shield, title: "Número", value: number),
+              PerfilInfo(
+                  icon: Icons.circle,
+                  title: "Pé dominante",
+                  value: dominantFoot),
             ],
           ),
         ),

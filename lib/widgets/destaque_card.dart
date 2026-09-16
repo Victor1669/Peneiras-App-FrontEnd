@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:peneiras/models/peneira_model.dart';
 import '../constants/app_colors.dart';
+
+import 'package:peneiras/models/peneira_model.dart';
+
+import 'package:peneiras/widgets/info_row.dart';
 
 class DestaqueCard extends StatelessWidget {
   final PeneiraCardModel destaque;
@@ -44,15 +47,24 @@ class DestaqueCard extends StatelessWidget {
             children: [
               const _BadgeNovo(),
               _Header(model: destaque),
-              _InfoRow(
+              InfoRow(
                 icon: Icons.location_on,
                 text: destaque.endereco!.isEmpty
                     ? "Sem endereço"
                     : destaque.endereco!,
               ),
-              _InfoRow(icon: Icons.calendar_today, text: destaque.date),
-              _InfoRow(icon: Icons.info, text: destaque.about),
-              _BotaoVerDetalhes(onPressed: onTap),
+              InfoRow(icon: Icons.calendar_today, text: destaque.date),
+              InfoRow(icon: Icons.info, text: destaque.about),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: ElevatedButton(
+                    onPressed: onTap,
+                    child: Text(
+                      'Ver detalhes',
+                      style: GoogleFonts.judson(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ))
             ],
           ),
         ],
@@ -136,43 +148,6 @@ class _Header extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const _InfoRow({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: AppColors.lightGreen),
-        const SizedBox(width: 6),
-        Text(text, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-      ],
-    );
-  }
-}
-
-class _BotaoVerDetalhes extends StatelessWidget {
-  final VoidCallback? onPressed;
-  const _BotaoVerDetalhes({this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsGeometry.directional(top: 10),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(
-          'Ver detalhes',
-          style: GoogleFonts.judson(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 }

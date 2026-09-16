@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:peneiras/app_router.dart';
 
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return ProviderScope(
+        child: MaterialApp.router(
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       scrollBehavior:
           const MaterialScrollBehavior().copyWith(scrollbars: false),
@@ -67,6 +69,6 @@ class MyApp extends StatelessWidget {
       ),
       routerConfig: router,
       title: 'Peneiras',
-    );
+    ));
   }
 }

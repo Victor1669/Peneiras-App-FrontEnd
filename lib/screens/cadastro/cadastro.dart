@@ -22,7 +22,6 @@ class CadastroScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenFrame(
       title: "Criar conta",
-      onBack: () => context.go("/"),
       footer: Column(
         spacing: 10,
         children: [

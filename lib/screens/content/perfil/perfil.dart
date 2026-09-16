@@ -12,7 +12,7 @@ import 'package:peneiras/layout/perfil/player_profile.dart';
 class PerfilScreen extends StatelessWidget {
   final bool isClub;
 
-  const PerfilScreen({super.key, this.isClub = false});
+  const PerfilScreen({super.key, this.isClub = true});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,6 @@ class PerfilScreen extends StatelessWidget {
 
     return ScreenFrame(
       title: isClub ? "Perfil de Clube" : "Perfil do Jogador",
-      onBack: () {},
       showBackButton: false,
       rightWidget: IconButton(
         icon: const Icon(Icons.settings, color: AppColors.lightGreen),

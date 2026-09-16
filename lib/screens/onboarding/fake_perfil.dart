@@ -157,7 +157,6 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
   Widget build(BuildContext context) {
     return ScreenFrame(
       title: widget.isClub ? "Perfil de Clube" : "Perfil do Jogador",
-      onBack: () {},
       showBackButton: false,
       rightWidget: IconButton(
         key: _settingsKey,

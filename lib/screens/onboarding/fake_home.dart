@@ -176,7 +176,6 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
   Widget build(BuildContext context) {
     return ScreenFrame(
       title: "",
-      onBack: () {},
       showBackButton: false,
       rightWidget: IconButton(
         icon: const Icon(Icons.notifications),

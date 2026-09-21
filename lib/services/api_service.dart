@@ -23,34 +23,39 @@ class ApiService {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final prefs = await SharedPreferences.getInstance();
-          final String? token = prefs.getString('auth_token');
+          final String? accessToken = prefs.getString('access_token');
 
-          if (token != null && token.isNotEmpty) {
-            options.headers['Authorization'] = 'Bearer $token';
+          if (accessToken != null && accessToken.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $accessToken';
           }
 
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          try {
-            final data = response.data;
-            String? message;
+          final showSuccess =
+              response.requestOptions.extra['showSuccessSnackBar'] ?? true;
 
-            if (data is Map && data.containsKey('message')) {
-              message = data['message']?.toString();
-            } else if (data is String && data.trim().isNotEmpty) {
-              message = data;
-            }
+          if (showSuccess) {
+            try {
+              final data = response.data;
+              String? message;
 
-            if (message != null && message.isNotEmpty) {
-              rootScaffoldMessengerKey.currentState?.showSnackBar(
-                SnackBar(
-                  content: Text(message),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            }
-          } catch (_) {}
+              if (data is Map && data.containsKey('message')) {
+                message = data['message']?.toString();
+              } else if (data is String && data.trim().isNotEmpty) {
+                message = data;
+              }
+
+              if (message != null && message.isNotEmpty) {
+                rootScaffoldMessengerKey.currentState?.showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            } catch (_) {}
+          }
 
           return handler.next(response);
         },
@@ -81,13 +86,17 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
     required T Function(dynamic json) fromJson,
     bool showErrorSnackBar = false,
+    bool showSuccessSnackBar = true,
   }) async {
     try {
       final response = await _dio.request(
         path,
         data: data?.toJson(),
         queryParameters: queryParameters,
-        options: Options(method: method),
+        options: Options(
+          method: method,
+          extra: {'showSuccessSnackBar': showSuccessSnackBar},
+        ),
       );
 
       return fromJson(response.data);
@@ -111,6 +120,7 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
     required FromJson<T> fromJson,
     bool showErrorSnackBar = false,
+    bool showSuccessSnackBar = true,
   }) async {
     try {
       final formData = FormData();
@@ -134,6 +144,7 @@ class ApiService {
         options: Options(
           method: method,
           contentType: 'multipart/form-data',
+          extra: {'showSuccessSnackBar': showSuccessSnackBar},
         ),
       );
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:peneiras/models/requests/login_requests.dart';
-import 'package:peneiras/services/auth_service.dart';
-import 'package:peneiras/models/inputs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../constants/app_colors.dart';
+
+import 'package:peneiras/services/auth_service.dart';
+import 'package:peneiras/models/requests/auth_requests.dart';
+import 'package:peneiras/models/inputs.dart';
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/widgets/form/dynamic_form.dart';
 

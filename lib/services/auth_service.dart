@@ -1,4 +1,4 @@
-import 'package:peneiras/models/requests/login_requests.dart';
+import 'package:peneiras/models/requests/auth_requests.dart';
 import 'package:peneiras/services/api_service.dart';
 import 'package:peneiras/utils/preferences_helper.dart';
 
@@ -15,11 +15,26 @@ class AuthService {
         fromJson: (json) => LoginResponse.fromJson(json),
         showErrorSnackBar: true);
 
-    await PreferencesHelper.saveString('auth_token', response.token);
+    await PreferencesHelper.saveString('access_token', response.accessToken);
+    await PreferencesHelper.saveString('refresh_token', response.refreshToken);
+
     return response;
   }
 
   Future<bool> logout() async {
-    return await PreferencesHelper.remove('auth_token');
+    return await PreferencesHelper.remove('access_token');
+  }
+
+  Future<void> refreshtoken(RefreshTokenRequest body) async {
+    final response = await _apiService.request<RefreshTokenResponse>(
+        path: "/auth/refresh",
+        method: "POST",
+        data: body,
+        showSuccessSnackBar: false,
+        showErrorSnackBar: true,
+        fromJson: (json) => RefreshTokenResponse.fromJson(json));
+
+    await PreferencesHelper.saveString('access_token', response.accessToken);
+    await PreferencesHelper.saveString('refresh_token', response.refreshToken);
   }
 }

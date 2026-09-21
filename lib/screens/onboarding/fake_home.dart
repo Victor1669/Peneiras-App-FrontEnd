@@ -25,18 +25,7 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    _carregarEPrintarToken();
     _checkFirstTimeAndShowTutorial();
-  }
-
-  Future<void> _carregarEPrintarToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('auth_token');
-
-    print("[DEBUG] Auth Token carregado na Home: $token");
-
-    if (token != null && mounted) {}
   }
 
   Future<void> _checkFirstTimeAndShowTutorial() async {

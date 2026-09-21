@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:peneiras/models/requests/auth_requests.dart';
+import 'package:peneiras/services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/services/peneira_service.dart';
@@ -23,7 +27,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _validarRefreshToken();
     _carregarPeneiras();
+  }
+
+  Future<void> _validarRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String refreshToken = prefs.getString('refresh_token') ?? "";
+
+    try {
+      await AuthService()
+          .refreshtoken(RefreshTokenRequest(refreshToken: refreshToken));
+    } catch (_) {
+      if (!mounted) return;
+
+      context.replace("/login");
+    }
   }
 
   Future<void> _carregarPeneiras() async {

@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'package:peneiras/providers/is_clube_controller.dart';
 import 'package:peneiras/services/auth_service.dart';
 import 'package:peneiras/constants/app_colors.dart';
+import 'package:peneiras/utils/preferences_helper.dart';
 import 'package:peneiras/utils/global_keys.dart';
 
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/layout/perfil/club_profile.dart';
 import 'package:peneiras/layout/perfil/player_profile.dart';
 
-class FakePerfilScreen extends StatefulWidget {
-  final bool isClub;
-
-  const FakePerfilScreen({super.key, this.isClub = false});
+class FakePerfilScreen extends ConsumerStatefulWidget {
+  const FakePerfilScreen({super.key});
 
   @override
-  State<FakePerfilScreen> createState() => _FakePerfilScreenState();
+  ConsumerState<FakePerfilScreen> createState() => _FakePerfilScreenState();
 }
 
-class _FakePerfilScreenState extends State<FakePerfilScreen> {
+class _FakePerfilScreenState extends ConsumerState<FakePerfilScreen> {
   TutorialCoachMark? tutorialCoachMark;
 
   final GlobalKey _settingsKey = GlobalKey();
@@ -32,9 +32,8 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
   }
 
   Future<void> _checkFirstTimeAndShowTutorial() async {
-    final prefs = await SharedPreferences.getInstance();
     final bool hasSeenTutorial =
-        prefs.getBool('ja_viu_tutorial_perfil') ?? false;
+        PreferencesHelper.getBool('ja_viu_tutorial_perfil') ?? false;
 
     if (!hasSeenTutorial) {
       _createTutorial();
@@ -43,13 +42,14 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
           if (mounted) _showTutorial();
         });
       });
-      await prefs.setBool('ja_viu_tutorial_perfil', true);
+      await PreferencesHelper.saveBool('ja_viu_tutorial_perfil', true);
     }
   }
 
   void _createTutorial() {
+    final isClub = ref.read(isClubeProvider);
     tutorialCoachMark = TutorialCoachMark(
-      targets: _createTargets(),
+      targets: _createTargets(isClub),
       colorShadow: Colors.black,
       opacityShadow: 0.8,
       onFinish: () {
@@ -75,7 +75,7 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
     );
   }
 
-  List<TargetFocus> _createTargets() {
+  List<TargetFocus> _createTargets(bool isClub) {
     return [
       TargetFocus(
         identify: "targetSettings",
@@ -109,9 +109,8 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
         ],
       ),
       TargetFocus(
-        identify:
-            widget.isClub ? "targetClubPerfilInfo" : "targetPlayerPerfilInfo",
-        keyTarget: widget.isClub ? perfilClubInfoKey : perfilPlayerInfoKey,
+        identify: isClub ? "targetClubPerfilInfo" : "targetPlayerPerfilInfo",
+        keyTarget: isClub ? perfilClubInfoKey : perfilPlayerInfoKey,
         shape: ShapeLightFocus.RRect,
         radius: 16,
         contents: [
@@ -145,8 +144,7 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
   }
 
   void realizarLogout() async {
-    final authService = AuthService();
-    await authService.logout();
+    await AuthService().logout();
 
     if (mounted) {
       context.go('/login');
@@ -155,8 +153,10 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isClub = ref.watch(isClubeProvider);
+
     return ScreenFrame(
-      title: widget.isClub ? "Perfil de Clube" : "Perfil do Jogador",
+      title: isClub ? "Perfil de Clube" : "Perfil do Jogador",
       showBackButton: false,
       rightWidget: IconButton(
         key: _settingsKey,
@@ -166,7 +166,7 @@ class _FakePerfilScreenState extends State<FakePerfilScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            widget.isClub
+            isClub
                 ? const ClubProfile(
                     isFake: true,
                   )

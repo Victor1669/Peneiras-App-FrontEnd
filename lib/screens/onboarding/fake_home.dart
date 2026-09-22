@@ -3,6 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'package:peneiras/models/requests/auth_requests.dart';
+import 'package:peneiras/services/auth_service.dart';
+
+import 'package:peneiras/utils/preferences_helper.dart';
 import 'package:peneiras/utils/global_keys.dart';
 
 import 'package:peneiras/layout/home/home_destaques.dart';
@@ -25,20 +29,34 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
   @override
   void initState() {
     super.initState();
+    _validarRefreshToken();
     _checkFirstTimeAndShowTutorial();
   }
 
-  Future<void> _checkFirstTimeAndShowTutorial() async {
+  Future<void> _validarRefreshToken() async {
     final prefs = await SharedPreferences.getInstance();
+    final String refreshToken = prefs.getString('refresh_token') ?? "";
+
+    try {
+      await AuthService()
+          .refreshtoken(RefreshTokenRequest(refreshToken: refreshToken));
+    } catch (_) {
+      if (!mounted) return;
+
+      context.replace("/login");
+    }
+  }
+
+  Future<void> _checkFirstTimeAndShowTutorial() async {
     final bool hasSeenTutorial =
-        prefs.getBool('ja_viu_tutorial_perfil') ?? false;
+        PreferencesHelper.getBool('ja_viu_tutorial_home') ?? false;
 
     if (!hasSeenTutorial) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _createTutorial();
         _showTutorial();
       });
-      await prefs.setBool('ja_viu_tutorial_home', false);
+      await PreferencesHelper.saveBool('ja_viu_tutorial_home', true);
     }
   }
 
@@ -47,7 +65,8 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
       targets: _createTargets(),
       colorShadow: Colors.black,
       opacityShadow: 0.8,
-      onFinish: () {
+      onFinish: () async {
+        context.replace("/home");
         return true;
       },
       onClickTarget: (target) {
@@ -56,6 +75,7 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
         }
       },
       onSkip: () {
+        context.replace("/home");
         return true;
       },
     );
@@ -92,10 +112,10 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
         TargetContent(
           align: ContentAlign.top,
           builder: (context, controller) {
-            return Column(
+            return const Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   "Aba Perfil",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -103,8 +123,8 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
                     fontSize: 20,
                   ),
                 ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: 8),
+                Text(
                   "Toque aqui para ir ao seu perfil e editar suas informações.",
                   style: TextStyle(color: Colors.white),
                 ),

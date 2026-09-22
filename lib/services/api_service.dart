@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:peneiras/utils/preferences_helper.dart';
 
 import 'package:peneiras/utils/global_keys.dart';
 
@@ -22,8 +22,8 @@ class ApiService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final prefs = await SharedPreferences.getInstance();
-          final String? accessToken = prefs.getString('access_token');
+          final String? accessToken =
+              PreferencesHelper.getString('access_token');
 
           if (accessToken != null && accessToken.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $accessToken';

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:peneiras/providers/club_controller.dart';
+import 'package:peneiras/providers/is_clube_controller.dart';
+import 'package:peneiras/providers/player_controller.dart';
 
 import '../constants/app_colors.dart';
 
-import 'package:peneiras/services/auth_service.dart';
-import 'package:peneiras/models/requests/auth_requests.dart';
 import 'package:peneiras/models/inputs.dart';
+import 'package:peneiras/models/requests/auth_requests.dart';
+
+import 'package:peneiras/utils/preferences_helper.dart';
+import 'package:peneiras/services/auth_service.dart';
+
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/widgets/form/dynamic_form.dart';
 
@@ -82,11 +89,12 @@ class LoginScreenBody extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends ConsumerWidget {
   const LoginForm({super.key});
 
   Future<void> _handleSubmit(
     BuildContext context,
+    WidgetRef ref,
     Map<String, dynamic> data,
   ) async {
     final String email = data['email']?.toString() ?? '';
@@ -102,25 +110,29 @@ class LoginForm extends StatelessWidget {
         ),
       );
 
-      final prefs = await SharedPreferences.getInstance();
+      ref.invalidate(isClubeProvider);
+      ref.invalidate(playerControllerProvider);
+      ref.invalidate(clubControllerProvider);
 
       final bool hasSeenTutorial =
-          prefs.getBool('ja_viu_tutorial_home') ?? false;
+          PreferencesHelper.getBool('ja_viu_tutorial_home') ?? false;
 
       if (context.mounted) {
-        context.replace(hasSeenTutorial ? '/onboarding' : '/home');
+        context.replace(
+          hasSeenTutorial ? '/home' : '/onboarding',
+        );
       }
     } catch (_) {}
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DynamicForm(
       inputs: [
         getEmailInput(),
         getPasswordInput(),
       ],
-      onSubmit: (data) => _handleSubmit(context, data),
+      onSubmit: (data) => _handleSubmit(context, ref, data),
     );
   }
 }

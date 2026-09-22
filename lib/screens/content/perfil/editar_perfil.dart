@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:peneiras/providers/is_clube_controller.dart';
 
 import 'package:peneiras/providers/player_controller.dart';
 import 'package:peneiras/providers/club_controller.dart';
@@ -44,27 +45,16 @@ List<InputConfig> buildInputsClube() => [
     ];
 
 class EditarPerfilScreen extends ConsumerStatefulWidget {
-  final bool isClub;
-
-  const EditarPerfilScreen({super.key, this.isClub = true});
+  const EditarPerfilScreen({super.key});
 
   @override
   ConsumerState<EditarPerfilScreen> createState() => _EditarPerfilScreenState();
 }
 
 class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
-  late final String tipo;
   File? _selectedImage;
   Uint8List? _webImage;
-  late final List<InputConfig> _inputs;
   String? _userImgUrl;
-
-  @override
-  void initState() {
-    super.initState();
-    tipo = widget.isClub ? "clube" : "jogador";
-    _inputs = widget.isClub ? buildInputsClube() : buildInputsJogador();
-  }
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -84,7 +74,7 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
     }
   }
 
-  Future<void> _handleSubmit(Map<String, dynamic> data) async {
+  Future<void> _handleSubmit(Map<String, dynamic> data, bool isClub) async {
     try {
       final nestedData = Map<String, dynamic>.from(data);
 
@@ -95,7 +85,7 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
         'complemento': nestedData.remove('complemento'),
       };
 
-      if (tipo == "jogador") {
+      if (!isClub) {
         await ref.read(playerControllerProvider.notifier).updatePlayer(
               dto: PlayerWithAddressRequest.fromJson(nestedData),
               photo: _selectedImage,
@@ -140,14 +130,17 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final asyncData = tipo == "jogador"
+    final isClub = ref.watch(isClubeProvider);
+    final inputs = isClub ? buildInputsClube() : buildInputsJogador();
+
+    final asyncData = !isClub
         ? ref.watch(playerControllerProvider)
         : ref.watch(clubControllerProvider);
 
     return asyncData.when(
       data: (entity) {
         final initialValues = _prepareInitialValues(entity);
-        return _buildFormScaffold(initialValues);
+        return _buildFormScaffold(initialValues, isClub, inputs);
       },
       loading: () => ScreenFrame(
         title: "Atualizar informações",
@@ -164,7 +157,8 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
     );
   }
 
-  Widget _buildFormScaffold(Map<String, dynamic> initialValues) {
+  Widget _buildFormScaffold(Map<String, dynamic> initialValues, bool isClub,
+      List<InputConfig> inputs) {
     return ScreenFrame(
       title: "Atualizar informações",
       headerFontSize: 20,
@@ -175,7 +169,7 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Text(
-                tipo == "jogador"
+                !isClub
                     ? "Dados pessoais\npreencha seus dados basicos."
                     : "Dados do clube\npreencha as informações básicas.",
                 textAlign: TextAlign.center,
@@ -204,9 +198,9 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
             ),
             DynamicForm(
               submitText: "Atualizar perfil",
-              inputs: _inputs,
+              inputs: inputs,
               initialValues: initialValues,
-              onSubmit: _handleSubmit,
+              onSubmit: (data) => _handleSubmit(data, isClub),
             ),
             TransparentButton(
                 onPressed: () {}, child: const Text("Excluir conta")),

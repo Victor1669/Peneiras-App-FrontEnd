@@ -10,7 +10,11 @@ final clubControllerProvider = AsyncNotifierProvider<ClubController, dynamic>(
 class ClubController extends AsyncNotifier<dynamic> {
   @override
   Future<dynamic> build() async {
-    return await ClubService().getClub();
+    try {
+      return await ClubService().getClub();
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> updateClub({

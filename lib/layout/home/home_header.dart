@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 
-class HomeHeader extends StatelessWidget {
-  final String? userName;
-  final GlobalKey? searchKey;
-  final ValueChanged<String>? onSearchChanged;
+import 'package:peneiras/providers/is_clube_controller.dart';
+import 'package:peneiras/providers/player_controller.dart';
+import 'package:peneiras/providers/club_controller.dart';
 
-  const HomeHeader({
-    super.key,
-    this.userName,
-    this.searchKey,
-    this.onSearchChanged,
-  });
+class HomeHeader extends ConsumerWidget {
+  final GlobalKey? searchKey;
+
+  const HomeHeader({super.key, this.searchKey});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isClub = ref.watch(isClubeProvider);
+
+    final asyncData = !isClub
+        ? ref.watch(playerControllerProvider)
+        : ref.watch(clubControllerProvider);
+
+    final userName = asyncData.when(
+      data: (entity) {
+        if (entity == null) return isClub ? 'Clube' : 'User';
+        final dataMap = entity.toJson();
+        return dataMap['name'] ?? (isClub ? 'Clube' : 'User');
+      },
+      loading: () => '...',
+      error: (_, __) => isClub ? 'Clube' : 'User',
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,7 +42,7 @@ class HomeHeader extends StatelessWidget {
               const TextSpan(
                   text: 'Olá, ', style: TextStyle(color: Colors.white)),
               TextSpan(
-                text: '${userName ?? 'User'}!',
+                text: userName,
                 style: const TextStyle(color: AppColors.lightGreen),
               ),
             ],
@@ -68,7 +82,6 @@ class HomeHeader extends StatelessWidget {
           padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(horizontal: 16),
           ),
-          onChanged: onSearchChanged,
         )
       ],
     );

@@ -21,8 +21,9 @@ class AuthService {
     return response;
   }
 
-  Future<bool> logout() async {
-    return await PreferencesHelper.remove('access_token');
+  Future<void> logout() async {
+    await PreferencesHelper.remove('access_token');
+    await PreferencesHelper.remove('refresh_token');
   }
 
   Future<void> refreshtoken(RefreshTokenRequest body) async {

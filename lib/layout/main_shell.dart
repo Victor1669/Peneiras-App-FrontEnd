@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/home_tabbar.dart';
+import 'package:peneiras/providers/is_clube_controller.dart';
 import 'package:peneiras/utils/global_keys.dart';
+
 import '../constants/app_colors.dart';
 
-class MainShell extends StatelessWidget {
+class MainShell extends ConsumerWidget {
   final String baseRoute;
   final Widget child;
 
   const MainShell({super.key, required this.baseRoute, required this.child});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final GlobalKey tabbarKey =
         baseRoute == "home" ? homeTabbarKey : onboardingTabbarKey;
+
+    final isClub = ref.watch(isClubeProvider);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -33,7 +38,7 @@ class MainShell extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 15),
-              _AddPeneiraButton(baseRoute: baseRoute),
+              if (isClub) ...[_AddPeneiraButton(baseRoute: baseRoute)],
               const SizedBox(height: 20),
               HomeTabbar(
                 baseRoute: baseRoute,

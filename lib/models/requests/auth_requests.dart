@@ -31,7 +31,7 @@ class LoginResponse {
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
         message: json['message'] ?? '',
-        accessToken: json['token'] ?? '',
+        accessToken: json['accessToken'] ?? '',
         refreshToken: json["refreshToken"] ?? '');
   }
 }

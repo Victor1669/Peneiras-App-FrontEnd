@@ -10,12 +10,13 @@ final playerControllerProvider =
 
 class PlayerController extends AsyncNotifier<dynamic> {
   @override
-  Future<PlayerWithAddressRequest> build() async {
-    final player = await PlayerService().getPlayer();
-
-    print(player.toJson());
-
-    return player;
+  Future<dynamic> build() async {
+    try {
+      final player = await PlayerService().getPlayer();
+      return player;
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> updatePlayer({

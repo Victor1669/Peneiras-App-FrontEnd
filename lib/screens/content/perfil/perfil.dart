@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
-
+import 'package:peneiras/providers/is_clube_controller.dart';
 import 'package:peneiras/services/auth_service.dart';
 
 import 'package:peneiras/layout/screen_frame.dart';
 import 'package:peneiras/layout/perfil/club_profile.dart';
 import 'package:peneiras/layout/perfil/player_profile.dart';
 
-class PerfilScreen extends StatelessWidget {
-  final bool isClub;
-
-  const PerfilScreen({super.key, this.isClub = true});
+class PerfilScreen extends ConsumerWidget {
+  const PerfilScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isClub = ref.watch(isClubeProvider);
+
     void realizarLogout() async {
-      final authService = AuthService();
-      await authService.logout();
+      await AuthService().logout();
 
       if (context.mounted) {
         context.go('/login');

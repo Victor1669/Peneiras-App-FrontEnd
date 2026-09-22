@@ -87,7 +87,7 @@ class ClubProfile extends ConsumerWidget {
             child: ClipOval(
               child: image.startsWith('http')
                   ? Image.network(image, fit: BoxFit.cover)
-                  : Image.asset(image, fit: BoxFit.cover),
+                  : Image.asset("assets/logo.png", fit: BoxFit.cover),
             ),
           ),
           const SizedBox(height: 12),

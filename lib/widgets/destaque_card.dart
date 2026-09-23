@@ -48,10 +48,11 @@ class DestaqueCard extends StatelessWidget {
               const _BadgeNovo(),
               _Header(model: destaque),
               InfoRow(
-                icon: Icons.location_on,
-                text: destaque.endereco!.isEmpty
-                    ? "Sem endereço"
-                    : destaque.endereco!,
+                  icon: Icons.category,
+                  text: destaque.category.value.toString()),
+              InfoRow(
+                text: destaque.modality.value.toString(),
+                icon: Icons.model_training,
               ),
               InfoRow(icon: Icons.calendar_today, text: destaque.date),
               InfoRow(icon: Icons.info, text: destaque.about),

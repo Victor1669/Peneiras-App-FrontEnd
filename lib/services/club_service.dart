@@ -16,7 +16,7 @@ class ClubService {
   }
 
   Future<void> create(CreateClubRequest body) async {
-    return apiService.request(
+    return await apiService.request(
       path: "/clubes/register",
       data: body,
       method: "POST",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peneiras/constants/app_colors.dart';
 import 'package:peneiras/models/peneira_model.dart';
+import 'package:peneiras/widgets/info_row.dart';
 
 class PeneiraCard extends StatelessWidget {
   final PeneiraCardModel peneira;
@@ -61,20 +62,21 @@ class PeneiraCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Row(
+                  const SizedBox(height: 10),
+                  Column(
+                    spacing: 10,
                     children: [
-                      Expanded(
-                        child: Text(
-                          peneira.endereco!.isEmpty
-                              ? "Sem endereço"
-                              : "Peneira de ${peneira.endereco!}",
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
-                            fontSize: 14,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      InfoRow(
+                        text: peneira.category.value.toString(),
+                        icon: Icons.category,
+                      ),
+                      InfoRow(
+                        text: peneira.modality.value.toString(),
+                        icon: Icons.model_training,
+                      ),
+                      InfoRow(
+                        text: peneira.about,
+                        icon: Icons.info,
                       ),
                     ],
                   ),

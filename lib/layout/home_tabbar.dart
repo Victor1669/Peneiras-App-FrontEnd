@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:peneiras/providers/is_clube_controller.dart';
 
 import '../constants/app_colors.dart';
 
-class HomeTabbar extends StatelessWidget {
+class HomeTabbar extends ConsumerWidget {
   final String baseRoute;
   final GlobalKey tabbarKey;
 
@@ -14,7 +17,9 @@ class HomeTabbar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isClube = ref.watch(isClubeProvider);
+
     return ClipRRect(
       key: tabbarKey,
       borderRadius: const BorderRadius.only(
@@ -29,16 +34,16 @@ class HomeTabbar extends StatelessWidget {
         unselectedItemColor: Colors.white54,
         elevation: 0,
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Inscrições',
+            icon: const Icon(Icons.assignment),
+            label: isClube ? 'Peneiras' : 'Inscrições',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Perfil',
           ),
@@ -50,7 +55,7 @@ class HomeTabbar extends StatelessWidget {
   int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
 
-    if (location.startsWith('/$baseRoute/inscricoes')) return 1;
+    if (location.startsWith('/$baseRoute/my-peneiras')) return 1;
     if (location.startsWith('/$baseRoute/perfil')) return 2;
     return 0;
   }
@@ -61,7 +66,7 @@ class HomeTabbar extends StatelessWidget {
         context.go('/$baseRoute');
         break;
       case 1:
-        context.go('/$baseRoute/inscricoes');
+        context.go('/$baseRoute/my-peneiras');
         break;
       case 2:
         context.go('/$baseRoute/perfil');

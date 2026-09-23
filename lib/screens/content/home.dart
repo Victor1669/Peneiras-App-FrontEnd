@@ -112,14 +112,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
             else ...[
-              HomeDestaques(
-                destaques: destaques,
-                isLoading: isLoading,
-              ),
-              HomePeneiras(
-                peneiras: peneiras,
-                isLoading: isLoading,
-              ),
+              if (destaques.isNotEmpty)
+                HomeDestaques(
+                  destaques: destaques,
+                  isLoading: isLoading,
+                ),
+              if (peneiras.isNotEmpty)
+                HomePeneiras(
+                  peneiras: peneiras,
+                  isLoading: isLoading,
+                ),
             ],
           ],
         ),

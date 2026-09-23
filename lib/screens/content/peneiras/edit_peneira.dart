@@ -24,7 +24,7 @@ class _EditPeneiraScreenState extends State<EditPeneiraScreen> {
   @override
   void initState() {
     super.initState();
-    _peneiraFuture = _peneiraService.getById(widget.peneiraId);
+    _peneiraFuture = _peneiraService.getByPeneiraId(widget.peneiraId);
   }
 
   @override

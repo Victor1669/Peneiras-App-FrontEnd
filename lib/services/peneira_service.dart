@@ -34,7 +34,18 @@ class PeneiraService {
     );
   }
 
-  Future<PeneiraModel> getById(String peneiraId) async {
+  Future<List<PeneiraCardModel>> getAllByClubeId() async {
+    return _apiService.request<List<PeneiraCardModel>>(
+      path: "/peneiras/clube",
+      method: "GET",
+      fromJson: (json) {
+        final list = (json is List ? json : (json['data'] as List? ?? []));
+        return list.map((item) => PeneiraCardModel.fromJson(item)).toList();
+      },
+    );
+  }
+
+  Future<PeneiraModel> getByPeneiraId(String peneiraId) async {
     return _apiService.request<PeneiraModel>(
         path: "/peneiras/$peneiraId",
         method: "GET",

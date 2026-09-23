@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/main_shell.dart';
 import 'package:peneiras/screens/content/peneiras/edit_peneira.dart';
+import 'package:peneiras/screens/content/peneiras/my_peneiras.dart';
 
 import "./screens/initial.dart";
 import "./screens/login.dart";
@@ -70,6 +71,11 @@ final GoRouter router = GoRouter(
           path: '/home/add-peneira',
           pageBuilder: (context, state) =>
               _noTransitionPage(const AddPeneiraScreen()),
+        ),
+        GoRoute(
+          path: '/home/my-peneiras',
+          pageBuilder: (context, state) =>
+              _noTransitionPage(const MyPeneirasScreen()),
         ),
         GoRoute(
           path: '/home/edit-peneira/:id',

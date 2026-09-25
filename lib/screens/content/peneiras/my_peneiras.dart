@@ -46,20 +46,15 @@ class _MyPeneirasScreenState extends ConsumerState<MyPeneirasScreen> {
 
     try {
       final isClube = ref.read(isClubeProvider);
-      debugPrint('MyPeneirasScreen: isClube = $isClube');
 
       final listaPeneiras = await _buscarPeneiras(isClube);
-      debugPrint('MyPeneirasScreen: ${listaPeneiras.length} itens recebidos');
 
       if (mounted) {
         setState(() {
           peneiras = listaPeneiras;
         });
       }
-    } catch (e, stack) {
-      debugPrint('MyPeneirasScreen: erro ao carregar -> $e');
-      debugPrint(stack.toString());
-
+    } catch (e) {
       if (mounted) {
         setState(() {
           peneiras = [];
@@ -98,7 +93,10 @@ class _MyPeneirasScreenState extends ConsumerState<MyPeneirasScreen> {
           padding: const EdgeInsets.only(bottom: 15),
           child: PeneiraCard(
             peneira: peneiras[index],
-            onTap: () {},
+            isEdit: true,
+            onTap: (peneiraId) {
+              context.go('/home/edit-peneira/$peneiraId');
+            },
           ),
         );
       },

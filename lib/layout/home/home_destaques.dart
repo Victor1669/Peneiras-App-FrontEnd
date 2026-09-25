@@ -82,7 +82,7 @@ class _HomeDestaquesState extends State<HomeDestaques> {
                     padding: const EdgeInsets.only(bottom: 15),
                     child: DestaqueCard(
                       onTap: () =>
-                          context.go('/home/edit-peneira/${peneira.id}'),
+                          context.go('/home/peneira-details/${peneira.id}'),
                       destaque: peneira,
                     ),
                   );

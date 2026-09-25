@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:peneiras/models/peneira_model.dart';
 import 'package:peneiras/widgets/peneira_card.dart';
@@ -47,7 +48,9 @@ class HomePeneiras extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 15),
               child: PeneiraCard(
                 peneira: peneiras[index],
-                onTap: () {},
+                onTap: (peneiraId) {
+                  context.go("/home/peneira-details/$peneiraId");
+                },
               ),
             );
           },

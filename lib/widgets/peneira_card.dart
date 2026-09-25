@@ -77,6 +77,10 @@ class PeneiraCard extends StatelessWidget {
                           icon: Icons.model_training,
                         ),
                         InfoRow(
+                          text: peneira.date,
+                          icon: Icons.model_training,
+                        ),
+                        InfoRow(
                           text: peneira.about,
                           icon: Icons.info,
                         ),

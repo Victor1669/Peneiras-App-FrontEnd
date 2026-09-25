@@ -4,6 +4,13 @@ import 'package:peneiras/services/api_service.dart';
 class PeneiraEnrollService {
   final ApiService _apiService = ApiService();
 
+  Future<void> enrollPeneira(String peneiraId) async {
+    return await _apiService.request(
+        path: "/peneiras/$peneiraId/enroll",
+        method: "POST",
+        fromJson: (json) {});
+  }
+
   Future<List<PeneiraEnrollResponse>> getAllEnrollments() async {
     return await _apiService.request<List<PeneiraEnrollResponse>>(
       path: "/peneiras/enrollments",

@@ -36,7 +36,7 @@ class PlayerProfile extends ConsumerWidget {
       data: (player) {
         return _buildProfileContent(
           context,
-          image: player.userImg ?? "assets/logo.png",
+          image: player?.userImg ?? "assets/logo.png",
           name: player.name,
           position: player.position ?? "Não informada",
           birthDate: player.birthDate ?? "Não informada",

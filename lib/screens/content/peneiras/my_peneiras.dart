@@ -4,114 +4,17 @@ import 'package:go_router/go_router.dart';
 import 'package:peneiras/layout/screen_frame.dart';
 
 import 'package:peneiras/providers/is_clube_controller.dart';
-import 'package:peneiras/models/peneira_model.dart';
-import 'package:peneiras/services/peneira_enroll_service.dart';
-import 'package:peneiras/services/peneira_service.dart';
+import 'package:peneiras/providers/peneira_enroll_controller.dart';
 
 import 'package:peneiras/widgets/peneira_card.dart';
 
-class MyPeneirasScreen extends ConsumerStatefulWidget {
+class MyPeneirasScreen extends ConsumerWidget {
   const MyPeneirasScreen({super.key});
 
   @override
-  ConsumerState<MyPeneirasScreen> createState() => _MyPeneirasScreenState();
-}
-
-class _MyPeneirasScreenState extends ConsumerState<MyPeneirasScreen> {
-  bool isLoading = true;
-  String? errorMessage;
-  List<PeneiraCardModel> peneiras = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _carregarPeneiras();
-  }
-
-  Future<List<PeneiraCardModel>> _buscarPeneiras(bool isClube) async {
-    if (isClube) {
-      return PeneiraService().getAllByClubeId();
-    }
-
-    final inscricoes = await PeneiraEnrollService().getAllEnrollments();
-
-    return inscricoes.map((inscricao) => inscricao.peneira).toList();
-  }
-
-  Future<void> _carregarPeneiras() async {
-    setState(() {
-      isLoading = true;
-      errorMessage = null;
-    });
-
-    try {
-      final isClube = ref.read(isClubeProvider);
-
-      final listaPeneiras = await _buscarPeneiras(isClube);
-
-      if (mounted) {
-        setState(() {
-          peneiras = listaPeneiras;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          peneiras = [];
-          errorMessage = e.toString();
-        });
-      }
-    } finally {
-      if (mounted) {
-        setState(() => isLoading = false);
-      }
-    }
-  }
-
-  Widget _buildConteudo() {
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (errorMessage != null) {
-      return Text(
-        'Erro ao carregar: $errorMessage',
-        style: const TextStyle(color: Colors.redAccent),
-      );
-    }
-
-    if (peneiras.isEmpty) {
-      return const Text('Nenhuma peneira encontrada');
-    }
-
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: peneiras.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 15),
-          child: PeneiraCard(
-            peneira: peneiras[index],
-            isEdit: true,
-            onTap: (peneiraId) {
-              context.go('/home/edit-peneira/$peneiraId');
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isClube = ref.watch(isClubeProvider);
-
-    ref.listen<bool>(isClubeProvider, (previous, next) {
-      if (previous != next) {
-        _carregarPeneiras();
-      }
-    });
+    final peneirasAsync = ref.watch(peneiraEnrollsProvider);
 
     return ScreenFrame(
       title: isClube ? 'Peneiras do clube' : 'Minhas inscrições',
@@ -133,7 +36,38 @@ class _MyPeneirasScreenState extends ConsumerState<MyPeneirasScreen> {
                   _AddPeneiraButton(),
                 ],
               ),
-            _buildConteudo(),
+            peneirasAsync.when(
+              data: (peneiras) {
+                if (peneiras.isEmpty) {
+                  return const Text('Nenhuma peneira encontrada');
+                }
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: peneiras.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: PeneiraCard(
+                        peneira: peneiras[index],
+                        isEdit: isClube,
+                        onTap: (peneiraId) {
+                          context.go(isClube
+                              ? '/home/edit-peneira/$peneiraId'
+                              : "/home/peneira-details/$peneiraId");
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Text(
+                'Erro ao carregar: $error',
+                style: const TextStyle(color: Colors.redAccent),
+              ),
+            ),
           ],
         ),
       ),

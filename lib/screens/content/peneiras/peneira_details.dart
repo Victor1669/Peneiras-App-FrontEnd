@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:peneiras/layout/screen_frame.dart';
+
 import 'package:peneiras/models/enums.dart';
 import 'package:peneiras/models/peneira_model.dart';
+
 import 'package:peneiras/providers/is_clube_controller.dart';
+import 'package:peneiras/providers/peneira_enroll_controller.dart';
+
+import 'package:peneiras/services/peneira_enroll_service.dart';
 import 'package:peneiras/services/peneira_service.dart';
 
 class PeneiraDetailsScreen extends ConsumerStatefulWidget {
@@ -18,18 +23,29 @@ class PeneiraDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
-  final PeneiraService _peneiraService = PeneiraService();
   late Future<PeneiraModel> _peneiraFuture;
 
   @override
   void initState() {
     super.initState();
-    _peneiraFuture = _peneiraService.getByPeneiraId(widget.peneiraId);
+    _getPeneiras();
+  }
+
+  Future<void> _getPeneiras() async {
+    _peneiraFuture = PeneiraService().getByPeneiraId(widget.peneiraId);
+  }
+
+  Future<void> _handleEnrollPeneira(String peneiraId) async {
+    if (peneiraId.isNotEmpty) {
+      await PeneiraEnrollService().enrollPeneira(peneiraId);
+      ref.invalidate(peneiraEnrollsProvider);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isClube = ref.watch(isClubeProvider);
+    final peneirasAsync = ref.watch(peneiraEnrollsProvider);
 
     return ScreenFrame(
       title: "Peneira",
@@ -105,22 +121,48 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
                   Icons.location_on,
                 ),
                 if (!isClube)
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  peneirasAsync.when(
+                    loading: () => const SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: null,
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                    child: Text(
-                      'Inscrever-se',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    error: (error, stackTrace) => const SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: null,
+                        child: Text('Erro ao carregar'),
                       ),
                     ),
+                    data: (peneiras) {
+                      final isEnrolled =
+                          peneiras.any((p) => p.id == peneira.id);
+
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: isEnrolled
+                              ? null
+                              : () => _handleEnrollPeneira(peneira.id),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            isEnrolled ? 'Inscrito' : 'Inscrever-se',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
               ],
             ),

@@ -92,47 +92,42 @@ class LoginScreenBody extends StatelessWidget {
 class LoginForm extends ConsumerWidget {
   const LoginForm({super.key});
 
-  Future<void> _handleSubmit(
-    BuildContext context,
-    WidgetRef ref,
-    Map<String, dynamic> data,
-  ) async {
-    final String email = data['email']?.toString() ?? '';
-    final String password = data['password']?.toString() ?? '';
-
-    try {
-      final authService = AuthService();
-
-      await authService.login(
-        LoginRequest(
-          email: email,
-          password: password,
-        ),
-      );
-
-      ref.invalidate(isClubeProvider);
-      ref.invalidate(playerControllerProvider);
-      ref.invalidate(clubControllerProvider);
-
-      final bool hasSeenTutorial =
-          PreferencesHelper.getBool('ja_viu_tutorial_home') ?? false;
-
-      if (context.mounted) {
-        context.replace(
-          hasSeenTutorial ? '/home' : '/onboarding',
-        );
-      }
-    } catch (_) {}
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DynamicForm(
+      submitText: "Entrar",
       inputs: [
         getEmailInput(),
         getPasswordInput(),
       ],
-      onSubmit: (data) => _handleSubmit(context, ref, data),
+      onSubmit: (data) async {
+        final String email = data['email']?.toString() ?? '';
+        final String password = data['password']?.toString() ?? '';
+
+        try {
+          final authService = AuthService();
+
+          await authService.login(
+            LoginRequest(
+              email: email,
+              password: password,
+            ),
+          );
+
+          ref.invalidate(isClubeProvider);
+          ref.invalidate(playerControllerProvider);
+          ref.invalidate(clubControllerProvider);
+
+          final bool hasSeenTutorial =
+              PreferencesHelper.getBool('ja_viu_tutorial_home') ?? false;
+
+          if (context.mounted) {
+            context.replace(
+              hasSeenTutorial ? '/home' : '/onboarding',
+            );
+          }
+        } catch (_) {}
+      },
     );
   }
 }

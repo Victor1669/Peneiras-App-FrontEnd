@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:peneiras/utils/secure_store_helper.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'package:peneiras/models/requests/auth_requests.dart';
@@ -34,8 +34,8 @@ class _FakeHomeScreenState extends State<FakeHomeScreen> {
   }
 
   Future<void> _validarRefreshToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String refreshToken = prefs.getString('refresh_token') ?? "";
+    final String refreshToken =
+        await SecureStorageHelper.getString('refresh_token') ?? "";
 
     try {
       await AuthService()

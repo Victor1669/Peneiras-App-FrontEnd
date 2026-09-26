@@ -34,24 +34,33 @@ class PlayerProfile extends ConsumerWidget {
 
     return playerAsync.when(
       data: (player) {
+        if (player == null) {
+          return const Center(
+            child: Text(
+              "Nenhum dado de perfil encontrado",
+              style: TextStyle(color: Colors.white70),
+            ),
+          );
+        }
+
         return _buildProfileContent(
           context,
-          image: player?.userImg ?? "assets/logo.png",
+          image: player.userImg ?? "assets/logo.png",
           name: player.name,
           position: player.position ?? "Não informada",
           birthDate: player.birthDate ?? "Não informada",
           dominantFoot: player.dominantFoot ?? "Não informado",
-          aboutText: /*player.about ??*/ "Nenhuma descrição informada.",
+          aboutText: "Nenhuma descrição informada.",
           height: player.heightCm?.toString() ?? "0",
         );
       },
       loading: () => const Center(
         child: CircularProgressIndicator(color: AppColors.lightGreen),
       ),
-      error: (err, stack) => Center(
+      error: (err, stack) => const Center(
         child: Text(
           "Erro ao carregar perfil",
-          style: const TextStyle(color: Colors.white70),
+          style: TextStyle(color: Colors.white70),
         ),
       ),
     );

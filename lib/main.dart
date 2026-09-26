@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:peneiras/app_router.dart';
 
 import 'package:peneiras/utils/preferences_helper.dart';
@@ -9,29 +11,34 @@ import 'package:peneiras/utils/global_keys.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PreferencesHelper.init();
+  await dotenv.load(fileName: ".env");
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-        child: MaterialApp.router(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       scrollBehavior:
           const MaterialScrollBehavior().copyWith(scrollbars: false),
+      title: 'Peneiras',
+      color: AppColors.darkBlue1,
+      routerConfig: router,
       builder: (context, child) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -48,7 +55,6 @@ class MyApp extends StatelessWidget {
           ),
         );
       },
-      color: AppColors.darkBlue1,
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: AppColors.darkBlue1,
@@ -67,8 +73,6 @@ class MyApp extends StatelessWidget {
               displayColor: Colors.white,
             )),
       ),
-      routerConfig: router,
-      title: 'Peneiras',
-    ));
+    );
   }
 }

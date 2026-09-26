@@ -5,7 +5,7 @@ description: "Peneiras App FrontEnd"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # Versão do app
-version: 1.2.0
+version: 1.2.1
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -32,6 +32,8 @@ dependencies:
   tutorial_coach_mark: ^1.3.4
   flutter_riverpod: ^3.4.3
   jwt_decoder: ^2.0.1
+  flutter_secure_storage: ^11.2.0
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +56,7 @@ flutter:
     - assets/fundo_app.png
     - assets/logo_home.png
     - assets/bola_na_rede.png
+    - .env
 
   # NÃO MEXA!
   uses-material-design: true

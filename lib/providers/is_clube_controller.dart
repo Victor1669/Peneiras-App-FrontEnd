@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-
 import 'package:peneiras/utils/preferences_helper.dart';
 
 class IsClubeController extends Notifier<bool> {
@@ -10,18 +8,7 @@ class IsClubeController extends Notifier<bool> {
   }
 
   bool _loadIsClube() {
-    final token = PreferencesHelper.getString("access_token");
-
-    if (token == null || token.isEmpty) {
-      return false;
-    }
-
-    try {
-      final payload = JwtDecoder.decode(token);
-      return payload['isClube'] as bool;
-    } catch (_) {
-      return false;
-    }
+    return PreferencesHelper.getBool('is_clube') ?? false;
   }
 
   void reload() {

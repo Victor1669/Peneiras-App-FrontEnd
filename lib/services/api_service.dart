@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:peneiras/utils/preferences_helper.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:peneiras/utils/global_keys.dart';
+import 'package:peneiras/utils/secure_store_helper.dart';
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
 
@@ -11,7 +12,7 @@ class ApiService {
 
   ApiService() {
     _dio = Dio(BaseOptions(
-      baseUrl: "http://localhost:8080",
+      baseUrl: dotenv.env['BACKEND_URL'] ?? "",
       headers: {
         'Content-Type': 'application/json',
       },
@@ -23,7 +24,7 @@ class ApiService {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final String? accessToken =
-              PreferencesHelper.getString('access_token');
+              await SecureStorageHelper.getString('access_token');
 
           if (accessToken != null && accessToken.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $accessToken';

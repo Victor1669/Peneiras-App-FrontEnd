@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/main_shell.dart';
 import 'package:peneiras/providers/auth_controller.dart';
+import 'package:peneiras/utils/secure_store_helper.dart';
 
 import "./screens/initial.dart";
 import "./screens/login.dart";
@@ -11,7 +12,6 @@ import "./screens/login.dart";
 import './screens/cadastro/cadastro.dart';
 import './screens/cadastro/cadastro_time.dart';
 import './screens/cadastro/cadastro_jogador.dart';
-import './screens/cadastro/cadsatro_sucesso.dart';
 
 import 'package:peneiras/screens/content/home.dart';
 import 'package:peneiras/screens/content/perfil/perfil.dart';
@@ -33,14 +33,24 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: "/",
     redirect: (context, state) async {
+      // Só faz validação de estiver na rota raiz
       if (state.matchedLocation != "/") {
         return null;
       }
 
-      try {
-        final authState = await ref.read(authStateProvider.future);
+      // Se não tiver token, vai pro fluxo normal
+      final refreshToken = await SecureStorageHelper.getString('refresh_token');
 
-        if (!authState) {
+      if (refreshToken == null || refreshToken.isEmpty) {
+        return null;
+      }
+
+      try {
+        // verifica se está autenticado
+        final isAutenticado = await ref.read(authStateProvider.future);
+
+        // Se não estiver, vai pro login
+        if (!isAutenticado) {
           return '/login';
         }
         return '/home';
@@ -68,10 +78,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'time',
             builder: (context, state) => const CadastroTimeScreen(),
-          ),
-          GoRoute(
-            path: 'sucesso',
-            builder: (context, state) => const CadastroSucessoScreen(),
           ),
         ],
       ),

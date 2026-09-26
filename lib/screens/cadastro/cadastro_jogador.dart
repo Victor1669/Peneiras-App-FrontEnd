@@ -90,7 +90,7 @@ class _CadastroJogadorScreenState extends State<CadastroJogadorScreen> {
       totalSteps: 3,
       currentStep: _currentStep,
       onBack: _goToPreviousStep,
-      child: _buildCurrentStep(),
+      child: SingleChildScrollView(child: _buildCurrentStep()),
     );
   }
 }

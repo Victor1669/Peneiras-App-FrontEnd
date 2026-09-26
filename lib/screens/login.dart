@@ -50,7 +50,8 @@ class LoginScreenBody extends StatelessWidget {
           ),
         ],
       ),
-      child: const Column(
+      child: SingleChildScrollView(
+          child: Column(
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
@@ -58,7 +59,7 @@ class LoginScreenBody extends StatelessWidget {
           ),
           LoginForm(),
         ],
-      ),
+      )),
     );
   }
 

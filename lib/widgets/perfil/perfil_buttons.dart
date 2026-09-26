@@ -31,33 +31,3 @@ class PerfilPrimaryButton extends StatelessWidget {
     );
   }
 }
-
-class PerfilSecondaryButton extends StatelessWidget {
-  final String? label;
-  final IconData? icon;
-  final VoidCallback? onPressed;
-  const PerfilSecondaryButton(
-      {super.key, this.label, this.icon, this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton.icon(
-        onPressed: onPressed ?? () {},
-        icon: Icon(icon ?? Icons.person, color: AppColors.lightGreen, size: 20),
-        label: Text(label ?? "Ver Peneiras",
-            style: GoogleFonts.judson(
-                fontSize: 15,
-                color: AppColors.lightGreen,
-                fontWeight: FontWeight.bold)),
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.lightGreen),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          padding: const EdgeInsets.symmetric(vertical: 18),
-        ),
-      ),
-    );
-  }
-}

@@ -75,7 +75,9 @@ class _CadastroTimeScreenState extends State<CadastroTimeScreen> {
       totalSteps: 2,
       currentStep: _currentStep,
       onBack: _goToPreviousStep,
-      child: _buildCurrentStep(),
+      child: SingleChildScrollView(
+        child: _buildCurrentStep(),
+      ),
     );
   }
 }

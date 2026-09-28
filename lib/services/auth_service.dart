@@ -11,11 +11,13 @@ class AuthService {
 
   Future<LoginResponse> login(LoginRequest body) async {
     final response = await _apiService.request<LoginResponse>(
-        path: "/auth/login",
-        method: "POST",
-        data: body,
-        fromJson: (json) => LoginResponse.fromJson(json),
-        showErrorSnackBar: true);
+      path: "/auth/login",
+      method: "POST",
+      data: body,
+      showErrorSnackBar: true,
+      showLoading: true,
+      fromJson: (json) => LoginResponse.fromJson(json),
+    );
 
     await SecureStorageHelper.setString('access_token', response.accessToken);
     await SecureStorageHelper.setString('refresh_token', response.refreshToken);
@@ -40,6 +42,7 @@ class AuthService {
         data: body,
         showSuccessSnackBar: false,
         showErrorSnackBar: true,
+        showLoading: true,
         fromJson: (json) => RefreshTokenResponse.fromJson(json));
 
     await SecureStorageHelper.setString('access_token', response.accessToken);

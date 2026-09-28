@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:peneiras/models/peneira_model.dart';
+
 import 'package:peneiras/providers/home_peneiras_controller.dart';
+import 'package:peneiras/providers/peneira_enroll_controller.dart';
 
 import 'package:peneiras/layout/home/home_header.dart';
 import 'package:peneiras/layout/home/home_destaques.dart';
@@ -15,6 +17,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncPeneiras = ref.watch(homePeneirasProvider);
+    ref.read(peneiraEnrollsProvider);
 
     return ScreenFrame(
       title: "",

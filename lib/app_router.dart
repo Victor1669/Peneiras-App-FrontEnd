@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/main_shell.dart';
 import 'package:peneiras/providers/auth_controller.dart';
+import 'package:peneiras/utils/global_keys.dart';
 import 'package:peneiras/utils/secure_store_helper.dart';
 
 import "./screens/initial.dart";
@@ -32,6 +33,7 @@ Page<void> _noTransitionPage(Widget child) {
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: "/",
+    navigatorKey: rootNavigatorKey,
     redirect: (context, state) async {
       // Só faz validação de estiver na rota raiz
       if (state.matchedLocation != "/") {
@@ -95,41 +97,47 @@ final routerProvider = Provider<GoRouter>((ref) {
                 _noTransitionPage(const HomeScreen()),
           ),
           GoRoute(
-            path: '/home/add-peneira',
-            pageBuilder: (context, state) =>
-                _noTransitionPage(const AddPeneiraScreen()),
-          ),
-          GoRoute(
             path: '/home/my-peneiras',
             pageBuilder: (context, state) =>
                 _noTransitionPage(const MyPeneirasScreen()),
           ),
           GoRoute(
-            path: '/home/edit-peneira/:id',
+            path: '/home/perfil',
+            pageBuilder: (context, state) =>
+                _noTransitionPage(const PerfilScreen()),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/content',
+        redirect: (context, state) {
+          if (state.uri.path == '/peneiras') {
+            return '/home';
+          }
+          return null;
+        },
+        routes: [
+          GoRoute(
+            path: 'add-peneira',
+            builder: (context, state) => const AddPeneiraScreen(),
+          ),
+          GoRoute(
+            path: 'edit-peneira/:id',
             builder: (context, state) {
               final peneiraId = state.pathParameters['id']!;
               return EditPeneiraScreen(peneiraId: peneiraId);
             },
           ),
           GoRoute(
-            path: '/home/peneira-details/:id',
+            path: 'peneira-details/:id',
             builder: (context, state) {
               final peneiraId = state.pathParameters['id']!;
               return PeneiraDetailsScreen(peneiraId: peneiraId);
             },
           ),
           GoRoute(
-            path: '/home/perfil',
-            pageBuilder: (context, state) =>
-                _noTransitionPage(const PerfilScreen()),
-            routes: [
-              GoRoute(
-                path: 'editar-perfil',
-                pageBuilder: (context, state) =>
-                    _noTransitionPage(const EditarPerfilScreen()),
-              ),
-            ],
-          ),
+              path: 'editar-perfil',
+              builder: (context, state) => EditarPerfilScreen()),
         ],
       ),
       ShellRoute(

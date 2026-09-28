@@ -49,7 +49,7 @@ class HomePeneiras extends StatelessWidget {
               child: PeneiraCard(
                 peneira: peneiras[index],
                 onTap: (peneiraId) {
-                  context.go("/home/peneira-details/$peneiraId");
+                  context.go("/content/peneira-details/$peneiraId");
                 },
               ),
             );

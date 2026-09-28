@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:peneiras/layout/screen_frame.dart';
 
@@ -80,6 +81,9 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
         return ScreenFrame(
           title: title,
           headerFontSize: 20,
+          onBack: () {
+            context.go("/home/my-peneiras");
+          },
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

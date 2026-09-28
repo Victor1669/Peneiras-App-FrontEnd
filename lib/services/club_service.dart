@@ -20,6 +20,7 @@ class ClubService {
       path: "/clubes/register",
       data: body,
       method: "POST",
+      showLoading: true,
       fromJson: (json) => {},
     );
   }

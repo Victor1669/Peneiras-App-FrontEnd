@@ -59,7 +59,10 @@ class _HomeDestaquesState extends State<HomeDestaques> {
       children: [
         RichText(
           text: TextSpan(
-            style: GoogleFonts.judson(fontSize: 24),
+            style: GoogleFonts.judson(
+              fontSize: 24,
+              color: Colors.white,
+            ),
             children: const [
               TextSpan(text: 'Destaques'),
             ],
@@ -82,7 +85,7 @@ class _HomeDestaquesState extends State<HomeDestaques> {
                     padding: const EdgeInsets.only(bottom: 15),
                     child: DestaqueCard(
                       onTap: () =>
-                          context.go('/home/peneira-details/${peneira.id}'),
+                          context.go('/content/peneira-details/${peneira.id}'),
                       destaque: peneira,
                     ),
                   );

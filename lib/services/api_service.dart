@@ -88,7 +88,10 @@ class ApiService {
     required T Function(dynamic json) fromJson,
     bool showErrorSnackBar = false,
     bool showSuccessSnackBar = true,
+    bool showLoading = false,
   }) async {
+    if (showLoading) showAppLoading();
+
     try {
       final response = await _dio.request(
         path,
@@ -103,13 +106,15 @@ class ApiService {
       return fromJson(response.data);
     } on DioException catch (e) {
       final errorMessage = _extractErrorMessage(e);
-      print('Erro de API ($method $path): $errorMessage');
+      debugPrint('Erro de API ($method $path): $errorMessage');
 
       if (showErrorSnackBar) {
         showAppSnackBar(errorMessage);
       }
 
       throw Exception(errorMessage);
+    } finally {
+      if (showLoading) hideAppLoading();
     }
   }
 
@@ -122,7 +127,10 @@ class ApiService {
     required FromJson<T> fromJson,
     bool showErrorSnackBar = false,
     bool showSuccessSnackBar = true,
+    bool showLoading = true,
   }) async {
+    if (showLoading) showAppLoading();
+
     try {
       final formData = FormData();
 
@@ -156,13 +164,15 @@ class ApiService {
       return fromJson(responseData);
     } on DioException catch (e) {
       final errorMessage = _extractErrorMessage(e);
-      print('Erro de API ($method $path): $errorMessage');
+      debugPrint('Erro de API ($method $path): $errorMessage');
 
       if (showErrorSnackBar) {
         showAppSnackBar(errorMessage);
       }
 
       throw Exception(errorMessage);
+    } finally {
+      if (showLoading) hideAppLoading();
     }
   }
 }
@@ -175,4 +185,46 @@ void showAppSnackBar(String message, {bool isError = true}) {
       behavior: SnackBarBehavior.floating,
     ),
   );
+}
+
+bool _isLoadingShown = false;
+
+void showAppLoading() {
+  if (_isLoadingShown) return;
+  final context = rootNavigatorKey.currentContext;
+  if (context == null) return;
+
+  _isLoadingShown = true;
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (!_isLoadingShown) return;
+
+    final ctx = rootNavigatorKey.currentContext;
+    if (ctx == null) return;
+
+    showDialog(
+      context: ctx,
+      barrierDismissible: false,
+      barrierColor: Colors.black54,
+      builder: (_) => const PopScope(
+        canPop: false,
+        child: Center(
+          child: CircularProgressIndicator(color: Colors.white),
+        ),
+      ),
+    );
+  });
+}
+
+void hideAppLoading() {
+  if (!_isLoadingShown) return;
+  _isLoadingShown = false;
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final context = rootNavigatorKey.currentContext;
+    if (context != null &&
+        Navigator.of(context, rootNavigator: true).canPop()) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  });
 }

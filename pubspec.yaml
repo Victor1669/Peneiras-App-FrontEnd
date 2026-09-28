@@ -1,11 +1,11 @@
 name: peneiras
-description: "Peneiras App FrontEnd"
+description: "Aplicação de gerenciamento de peneiras para jogadores e clubes"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # Versão do app
-version: 1.2.1
+version: 1.2.2
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -44,9 +44,12 @@ dev_dependencies:
 
 # Logo do app
 flutter_launcher_icons:
+    image_path: "assets/logo.png"
+    web:
+      generate: true
+      image_path: "assets/logo.png" 
     android: true
     ios: true
-    image_path: "assets/logo.png"
     min_sdk_android: 21
     
 # The following section is specific to Flutter packages.

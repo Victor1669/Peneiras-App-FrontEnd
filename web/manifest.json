@@ -1,11 +1,11 @@
 {
-    "name": "peneiras",
-    "short_name": "peneiras",
+    "name": "Peneiras",
+    "short_name": "Peneiras",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Aplicação de gerenciamento de peneiras para jogadores e clubes",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

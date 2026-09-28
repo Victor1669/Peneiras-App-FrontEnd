@@ -30,7 +30,7 @@ class PerfilScreen extends ConsumerWidget {
       showBackButton: false,
       rightWidget: IconButton(
         icon: const Icon(Icons.settings, color: AppColors.lightGreen),
-        onPressed: () => {context.go("/home/perfil/editar-perfil")},
+        onPressed: () => {context.go("/content/editar-perfil")},
       ),
       child: SingleChildScrollView(
         child: Column(

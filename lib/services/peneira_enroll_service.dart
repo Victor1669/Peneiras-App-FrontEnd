@@ -8,6 +8,7 @@ class PeneiraEnrollService {
     return await _apiService.request(
         path: "/peneiras/$peneiraId/enroll",
         method: "POST",
+        showLoading: true,
         fromJson: (json) {});
   }
 

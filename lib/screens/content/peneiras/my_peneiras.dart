@@ -54,8 +54,8 @@ class MyPeneirasScreen extends ConsumerWidget {
                         isEdit: isClube,
                         onTap: (peneiraId) {
                           context.go(isClube
-                              ? '/home/edit-peneira/$peneiraId'
-                              : "/home/peneira-details/$peneiraId");
+                              ? '/content/edit-peneira/$peneiraId'
+                              : "/content/peneira-details/$peneiraId");
                         },
                       ),
                     );
@@ -82,7 +82,7 @@ class _AddPeneiraButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.go("/home/add-peneira");
+        context.go("/content/add-peneira");
       },
       borderRadius: BorderRadius.circular(12),
       child: Container(

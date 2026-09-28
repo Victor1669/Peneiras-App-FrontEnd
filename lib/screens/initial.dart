@@ -11,6 +11,9 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final scale = (width / 400).clamp(0.65, 1.0);
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -22,14 +25,17 @@ class InitialScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    spacing: 15,
+                    spacing: 24 * scale,
                     children: [
-                      Image.asset("assets/logo.png"),
+                      Image.asset(
+                        "assets/logo.png",
+                        height: 200 * scale,
+                      ),
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
                           style: GoogleFonts.judson(
-                            fontSize: 50,
+                            fontSize: 50 * scale,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -44,22 +50,26 @@ class InitialScreen extends StatelessWidget {
                       ),
                       RichText(
                         textAlign: TextAlign.center,
-                        text: const TextSpan(
+                        text: TextSpan(
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                          children: [
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20 * scale,
+                          ),
+                          children: const [
                             TextSpan(
-                                text: 'Encontre sua proxima \n',
-                                style: TextStyle(color: Colors.white)),
+                              text: 'Encontre sua proxima \n',
+                              style: TextStyle(color: Colors.white),
+                            ),
                             TextSpan(
-                                text: 'oportunidade.',
-                                style: TextStyle(color: AppColors.lightGreen)),
+                              text: 'oportunidade.',
+                              style: TextStyle(color: AppColors.lightGreen),
+                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  const Botoes()
+                  const Botoes(),
                 ],
               ),
             ),
@@ -87,7 +97,7 @@ class Botoes extends StatelessWidget {
                 Icons.person,
                 size: 25,
               ),
-              Text('Criar conta')
+              Text('Criar conta'),
             ],
           ),
         ),
@@ -102,7 +112,7 @@ class Botoes extends StatelessWidget {
                 Icons.login,
                 size: 25,
               ),
-              Text('Entrar')
+              Text('Entrar'),
             ],
           ),
         ),

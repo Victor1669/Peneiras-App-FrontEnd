@@ -32,6 +32,9 @@ class _EditPeneiraScreenState extends State<EditPeneiraScreen> {
     return ScreenFrame(
       title: "Editar Peneira",
       headerFontSize: 20,
+      onBack: () {
+        context.go("/home/my-peneiras");
+      },
       child: FutureBuilder<PeneiraModel>(
         future: _peneiraFuture,
         builder: (context, snapshot) {

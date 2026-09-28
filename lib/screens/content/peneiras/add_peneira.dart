@@ -16,6 +16,9 @@ class AddPeneiraScreen extends StatelessWidget {
     return ScreenFrame(
       title: "Nova Peneira",
       headerFontSize: 20,
+      onBack: () {
+        context.go("/home/my-peneiras");
+      },
       child: SingleChildScrollView(
         child: Column(
           children: [

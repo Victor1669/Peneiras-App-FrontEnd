@@ -60,8 +60,8 @@ class MyApp extends ConsumerWidget {
         scaffoldBackgroundColor: AppColors.darkBlue1,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 50),
-            padding: const EdgeInsets.all(20),
+            minimumSize: const Size(double.infinity, 48),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: AppColors.lightGreen,

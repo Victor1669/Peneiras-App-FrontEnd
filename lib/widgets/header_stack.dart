@@ -30,8 +30,6 @@ class HeaderStack extends StatelessWidget {
                   () {
                     if (context.canPop()) {
                       context.pop();
-                    } else {
-                      context.go("/home");
                     }
                   },
             ),

@@ -33,6 +33,9 @@ class LoginScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenFrame(
       title: "Entrar",
+      onBack: () {
+        context.go("/");
+      },
       footer: Column(
         spacing: 10,
         children: [

@@ -47,51 +47,46 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
     final isClube = ref.watch(isClubeProvider);
     final peneirasAsync = ref.watch(peneiraEnrollsProvider);
 
-    return ScreenFrame(
-      title: "Peneira",
-      headerFontSize: 20,
-      child: FutureBuilder<PeneiraModel>(
-        future: _peneiraFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return FutureBuilder<PeneiraModel>(
+      future: _peneiraFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const ScreenFrame(
+            title: "",
+            headerFontSize: 20,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          }
+        if (snapshot.hasError) {
+          return ScreenFrame(
+            title: "",
+            headerFontSize: 20,
+            child: Center(child: Text('Erro: ${snapshot.error}')),
+          );
+        }
 
-          if (!snapshot.hasData) {
-            return const Center(child: Text('Peneira não encontrada'));
-          }
+        if (!snapshot.hasData) {
+          return const ScreenFrame(
+            title: "",
+            headerFontSize: 20,
+            child: Center(child: Text('Peneira não encontrada')),
+          );
+        }
 
-          final peneira = snapshot.data!;
+        final peneira = snapshot.data!;
+        final title = "Peneira de ${peneira.category.label}";
 
-          return SingleChildScrollView(
+        return ScreenFrame(
+          title: title,
+          headerFontSize: 20,
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 24,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 24),
-                          Text(
-                            "Peneira ${peneira.category.value}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 24,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,7 +95,7 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
                     _buildInfoBox('Horário', peneira.hour),
                     _buildInfoBox(
                       'Local',
-                      peneira.modality.value,
+                      peneira.modality.label,
                     ),
                   ],
                 ),
@@ -112,7 +107,7 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
                 _buildUniformsSection(peneira.uniforms),
                 _buildSection(
                   'O que levar',
-                  peneira.documents.value,
+                  peneira.documents.label,
                   Icons.folder,
                 ),
                 _buildSection(
@@ -166,9 +161,9 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
                   ),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -236,7 +231,7 @@ class _PeneiraDetailsScreenState extends ConsumerState<PeneiraDetailsScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    uniforms[index].value,
+                    uniforms[index].label,
                     style: const TextStyle(
                       color: Colors.green,
                       fontSize: 11,

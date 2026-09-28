@@ -162,6 +162,9 @@ class _EditarPerfilScreenState extends ConsumerState<EditarPerfilScreen> {
     return ScreenFrame(
       title: "Atualizar informações",
       headerFontSize: 20,
+      onBack: () {
+        context.go("/home/perfil");
+      },
       child: SingleChildScrollView(
         child: Column(
           spacing: 20,

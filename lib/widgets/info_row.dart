@@ -11,10 +11,16 @@ class InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, size: 16, color: AppColors.lightGreen),
         const SizedBox(width: 6),
-        Text(text, style: const TextStyle(color: Colors.white70, fontSize: 14)),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+        ),
       ],
     );
   }

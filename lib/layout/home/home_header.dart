@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:peneiras/constants/app_colors.dart';
+import 'package:peneiras/providers/home_peneiras_controller.dart';
 
 import 'package:peneiras/providers/is_clube_controller.dart';
 import 'package:peneiras/providers/player_controller.dart';
@@ -52,6 +53,8 @@ class HomeHeader extends ConsumerWidget {
         SearchBar(
           key: searchKey,
           hintText: 'Buscar oportunidades...',
+          elevation: WidgetStateProperty.all(0),
+          backgroundColor: WidgetStateProperty.all(Colors.transparent),
           hintStyle: WidgetStateProperty.all(
             GoogleFonts.judson(
               fontSize: 18,
@@ -68,8 +71,6 @@ class HomeHeader extends ConsumerWidget {
             Icons.search,
             color: AppColors.lightGreen,
           ),
-          backgroundColor: WidgetStateProperty.all(Colors.transparent),
-          elevation: WidgetStateProperty.all(0),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
@@ -82,6 +83,9 @@ class HomeHeader extends ConsumerWidget {
           padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(horizontal: 16),
           ),
+          onChanged: (value) {
+            ref.read(searchQueryProvider.notifier).setQuery(value);
+          },
         )
       ],
     );
